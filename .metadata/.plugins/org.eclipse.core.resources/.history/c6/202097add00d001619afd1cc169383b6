@@ -1,0 +1,13 @@
+package edu.upenn.cis550.storage;
+
+/**
+ * Main class to store the node structure
+ * @author Jitesh
+ *
+ */
+public class Struct {
+	
+	public Struct(){
+		//BerkleyDB requires a default constructor
+	}
+}

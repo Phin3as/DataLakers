@@ -1,0 +1,17 @@
+package edu.upenn.cis550.storage;
+
+import com.sleepycat.persist.model.PrimaryKey;
+
+/**
+ * Main class to store the node structure
+ * @author Jitesh
+ *
+ */
+@Entity
+public class GraphNode {
+	
+	@PrimaryKey
+	public GraphNode(){
+		//BerkleyDB requires a default constructor
+	}
+}

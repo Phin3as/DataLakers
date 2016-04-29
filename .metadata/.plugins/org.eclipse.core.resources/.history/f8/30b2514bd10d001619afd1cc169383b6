@@ -1,0 +1,36 @@
+package edu.upenn.cis550.storage;
+
+import java.util.ArrayList;
+
+import com.sleepycat.persist.model.Entity;
+import com.sleepycat.persist.model.PrimaryKey;
+
+/**
+ * Main class to store the node structure
+ * @author Jitesh
+ *
+ */
+@Entity
+public class GraphNode {
+	
+	@PrimaryKey
+	private int nodeID;
+	private int documentID;
+	private String name;
+	private String type;
+	private String value;
+	private int parent;
+	private ArrayList<Integer> children = new ArrayList<Integer>();
+	
+	public GraphNode(){
+		//BerkleyDB requires a default constructor
+	}
+
+	public int getDocumentID() {
+		return documentID;
+	}
+
+	public void setDocumentID(int documentID) {
+		this.documentID = documentID;
+	}
+}
