@@ -81,12 +81,11 @@ public class ExtractFields {
 			json.extractNode(documentID, file, extension(), store);
 		} else if(ext.equals("plain")){
 			text.extractNode(documentID, file, extension(), store);
-		} else if(ext.equals("html")){
+		} else if(ext.equals("xml")){
 			xml.extractNode(documentID, file, extension(), store);
-//			System.out.println(extension());
-		}else if(ext.equals("csv")){
+		} else if(ext.equals("csv")){
 			csv.extractNode(documentID, file, extension(), store);
-		}else {
+		} else {
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");
 		}
 	}

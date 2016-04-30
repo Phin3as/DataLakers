@@ -18,6 +18,12 @@ public class test {
 		e.setDataBase(store);
 		File file = new File("E:/Java_Workspace/DLMS/Tiwari_Sanidhya.txt");
 		e.extract(file, 1);
+		File file2 = new File("E:/Java_Workspace/DLMS/sample.json");
+		e.extract(file2, 2);
+		File file3 = new File("E:/Java_Workspace/DLMS/sample.xml");
+		e.extract(file3, 3);
+		File file4 = new File("E:/Java_Workspace/DLMS/sample.csv");
+		e.extract(file4, 4);
 		store.closeDB();
 	}
 }

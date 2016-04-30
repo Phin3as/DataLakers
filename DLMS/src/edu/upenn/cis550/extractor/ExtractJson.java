@@ -133,7 +133,7 @@ public class ExtractJson {
 	    	node.setChildren(extractJsonNode(field.getValue(), node.getId(), docId));
 	    	store.putGraphNode(node);
 	    	map.put(node.getId(), node);
-	    	System.out.println(node.getId() +" --- "+ map.get(node.getId()).getName());
+//	    	System.out.println(node.getId() +" --- "+ map.get(node.getId()).getName());
 	    }
 	    
 	    return children;
