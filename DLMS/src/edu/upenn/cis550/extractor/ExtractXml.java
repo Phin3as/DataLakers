@@ -16,6 +16,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import edu.upenn.cis550.storage.StorageAPI;
+
 /**
  * This class reads XML files and extracts nodes 
  * and store them in database
@@ -28,12 +30,14 @@ public class ExtractXml {
 	private int dID;
 	private File f;
 	private String extension;
+	private StorageAPI store;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
 	
-	public void extractNode(int dID, File f, String ext) throws IOException, ParserConfigurationException, SAXException{
+	public void extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, ParserConfigurationException, SAXException{
 		this.dID = dID;
 		this.f = f;
 		this.extension = ext;
+		this.store = db;
 		parseXml();
 		
 	}
@@ -57,6 +61,7 @@ public class ExtractXml {
 		
 		Node in = (Node) doc;
 		node.setChildren(extractXmlNode(in, node.getId(), dID));
+		store.putGraphNode(node);
     	map.put(node.getId(), node);
 		
 		for(int i : map.keySet()){
@@ -126,6 +131,7 @@ public class ExtractXml {
 					localChildren.addAll(attribChildren);
 					node.setChildren(localChildren);
 				}
+				store.putGraphNode(node);
 				map.put(node.getId(), node);
 				System.out.println(node.getId() +" --- "+ map.get(node.getId()).getName());
 				
@@ -155,6 +161,7 @@ public class ExtractXml {
 		 			 			 	 parentId,
 		 			 			 	 null);
 			children.add(node.getId());
+			store.putGraphNode(node);
 			map.put(node.getId(), node);
 			
 		}

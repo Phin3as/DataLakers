@@ -15,6 +15,8 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.xml.sax.SAXException;
 
+import edu.upenn.cis550.storage.StorageAPI;
+
 /**
  * This class reads CSV files and extracts nodes 
  * and store them in database 
@@ -26,13 +28,15 @@ public class ExtractCsv {
 	private int dID;
 	private File f;
 	private String extension;
+	private StorageAPI store;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
 	private CSVParser parser;
 	
-	public void extractNode(int dID, File f, String ext) throws IOException, ParserConfigurationException, SAXException{
+	public void extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, ParserConfigurationException, SAXException{
 		this.dID = dID;
 		this.f = f;
 		this.extension = ext;
+		this.store = db;
 		parseCsv();
 		
 	}
@@ -87,17 +91,20 @@ public class ExtractCsv {
 	 					 					Integer.toString(j), //value
 	 					 					headNode.getId(),
 	 					 					null);
+				store.putGraphNode(recNode);
 				map.put(recNode.getId(), recNode);
 				headChildren.add(recNode.getId());
 				j = j + 1;
 			}
 			
 			headNode.setChildren(headChildren);
+			store.putGraphNode(headNode);
 			map.put(headNode.getId(), headNode);
 			headChildren = new ArrayList<Integer>();
 		}
 		
 		fileNode.setChildren(fileChildren);
+		store.putGraphNode(fileNode);
 		map.put(fileNode.getId(), fileNode);
 		for (CSVRecord rec : parser) {
 			System.out.println(rec.toString());

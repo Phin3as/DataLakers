@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.PTBTokenizer;
+import edu.upenn.cis550.storage.StorageAPI;
 
 /**
  * This class reads plain/text files and pdfs and extracts nodes 
@@ -29,12 +30,14 @@ public class ExtractText {
 	private int dID;
 	private File f;
 	private String extension;
+	private StorageAPI store;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
 	
-	public void extractNode(int dID, File f, String ext) throws IOException, SAXException, TikaException{
+	public void extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, SAXException, TikaException{
 		this.dID = dID;
 		this.f = f;
 		this.extension = ext;
+		this.store = db;
 		parseText();
 		
 	}
@@ -50,6 +53,7 @@ public class ExtractText {
  			 	 				 null);
 		
 		root.setChildren(tokenize(root.getId()));
+		store.putGraphNode(root);
 		map.put(root.getId(), root);
 		
 		for(int i : map.keySet()){
@@ -109,6 +113,7 @@ public class ExtractText {
 	 			 	 			   parentId,
 	 			 	 			   null);
 	      i = i + 1;
+	      store.putGraphNode(node);
 	      map.put(node.getId(), node);
 	      children.add(node.getId());
 //	      System.out.println(label);

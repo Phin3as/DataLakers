@@ -1,4 +1,5 @@
 package edu.upenn.cis550.extractor;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -9,6 +10,8 @@ import org.apache.tika.exception.TikaException;
 import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import edu.upenn.cis550.storage.StorageAPI;
 
 /**
  * This class handles the File, identify suitable parser 
@@ -25,6 +28,7 @@ public class ExtractFields {
 	private static int id = 0; // this is for node id, change it to sensible name
 	private int documentID;
 	private File file;
+	private StorageAPI store;
 	
 	//Extractor Objects
 	private ExtractJson json = new ExtractJson();
@@ -41,6 +45,10 @@ public class ExtractFields {
 		return instance;	
 	}
 	   
+	public void setDataBase(StorageAPI db){
+		this.store = db;
+	}
+	
 	public int getDocumentID() {
 		return documentID;
 	}
@@ -70,14 +78,14 @@ public class ExtractFields {
 		
 		String ext = extension();
 		if(ext.equals("json")){
-			json.extractNode(documentID, file, extension());
+			json.extractNode(documentID, file, extension(), store);
 		} else if(ext.equals("plain")){
-			text.extractNode(documentID, file, extension());
+			text.extractNode(documentID, file, extension(), store);
 		} else if(ext.equals("html")){
-			xml.extractNode(documentID, file, extension());
+			xml.extractNode(documentID, file, extension(), store);
 //			System.out.println(extension());
 		}else if(ext.equals("csv")){
-			csv.extractNode(documentID, file, extension());
+			csv.extractNode(documentID, file, extension(), store);
 		}else {
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");
 		}

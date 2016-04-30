@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.upenn.cis550.storage.StorageAPI;
+
 /**
  * This class reads JSON files and extracts nodes 
  * and store them in database 
@@ -23,12 +25,14 @@ public class ExtractJson {
 	private int dID;
 	private File f;
 	private String extension;
+	private StorageAPI store;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
 	
-	public void extractNode(int dID, File f, String ext) throws JsonProcessingException, IOException{
+	public void extractNode(int dID, File f, String ext, StorageAPI db) throws JsonProcessingException, IOException{
 		this.dID = dID;
 		this.f = f;
 		this.extension = ext;
+		this.store = db;
 		parseJson();
 		
 	}
@@ -46,6 +50,7 @@ public class ExtractJson {
 	 			 			 	 -1,
 	 			 			 	 null);
     	node.setChildren(extractJsonNode(root, node.getId(), dID));
+    	store.putGraphNode(node);
     	map.put(node.getId(), node);
 		
 		for(int i : map.keySet()){
@@ -88,6 +93,7 @@ public class ExtractJson {
 						 			 	 null);
 				children.add(node.getId());
 		    	i = i + 1;
+		    	store.putGraphNode(node);
 		    	map.put(node.getId(), node);
 			}
 			
@@ -125,6 +131,7 @@ public class ExtractJson {
 	    	children.add(node.getId());
 
 	    	node.setChildren(extractJsonNode(field.getValue(), node.getId(), docId));
+	    	store.putGraphNode(node);
 	    	map.put(node.getId(), node);
 	    	System.out.println(node.getId() +" --- "+ map.get(node.getId()).getName());
 	    }
