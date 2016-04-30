@@ -32,11 +32,9 @@ public class StorageAPI {
 	}
 	
 	public void putGraphNode(Struct node){
-		GraphNode graphNode = da.nodeByID.get(node.getId());
-		if(graphNode != null){
-			graphNode = new GraphNode(node.getId(),node.getDocumentID(),node.getName(),node.getType(),
+		GraphNode graphNode = new GraphNode(node.getId(),node.getDocumentID(),node.getName(),node.getType(),
 									node.getValue(),node.getParent(),node.getChildren());
-		}
+		da.nodeByID.put(graphNode);
 	}
 	
 	/**

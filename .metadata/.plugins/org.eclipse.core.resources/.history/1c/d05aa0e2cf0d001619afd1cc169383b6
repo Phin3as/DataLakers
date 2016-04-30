@@ -1,9 +1,0 @@
-package edu.upenn.cis550.storage;
-/**
- * The main berkley DB Environment class
- * @author Jitesh
- *
- */
-public class BerkleyDBEnvironment {
-	
-}
