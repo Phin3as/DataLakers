@@ -7,6 +7,7 @@ import com.sleepycat.persist.PrimaryIndex;
 public class DataAccessor {
 	/** Accessors **/
 	public PrimaryIndex<Integer,GraphNode> nodeByID;
+	public PrimaryIndex<String, InvertedIndex> wordByValue; 
 	
 	/**
 	 * Open the indices
@@ -18,5 +19,6 @@ public class DataAccessor {
 		
 		/** primary key for graph node class **/
 		nodeByID = store.getPrimaryIndex(Integer.class, GraphNode.class);
+		wordByValue = store.getPrimaryIndex(String.class, InvertedIndex.class);
 	}
 }
