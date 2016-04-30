@@ -1,22 +1,33 @@
 package edu.upenn.cis550.extractor;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.csv.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.xml.sax.SAXException;
 
+/**
+ * This class reads CSV files and extracts nodes 
+ * and store them in database 
+ * @author Sanidhya
+ *
+ */
 public class ExtractCsv {
 	
 	private int dID;
 	private File f;
 	private String extension;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
+	private CSVParser parser;
 	
 	public void extractNode(int dID, File f, String ext) throws IOException, ParserConfigurationException, SAXException{
 		this.dID = dID;
@@ -28,9 +39,9 @@ public class ExtractCsv {
 	
 	private void parseCsv() throws IOException{
 		Reader reader = new FileReader(f);
-		CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withAllowMissingColumnNames());
+		parser = new CSVParser(reader, CSVFormat.DEFAULT.withAllowMissingColumnNames());
 		List<CSVRecord> list = parser.getRecords();
-		Iterator<CSVRecord> records = parser.iterator();
+//		Iterator<CSVRecord> records = parser.iterator();
 		
 		ArrayList<Integer> fileChildren = new ArrayList<Integer>();
 		ArrayList<Integer> headChildren = new ArrayList<Integer>();
@@ -117,6 +128,5 @@ public class ExtractCsv {
 		// Visualization ends
 		
 	}
-
 	
 }

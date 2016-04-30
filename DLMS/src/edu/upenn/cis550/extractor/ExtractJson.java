@@ -12,7 +12,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * This class reads json file
+ * This class reads JSON files and extracts nodes 
+ * and store them in database 
+ *
  * @author Sanidhya
  *
  */
@@ -129,6 +131,5 @@ public class ExtractJson {
 	    
 	    return children;
 	}
-	
 
 }

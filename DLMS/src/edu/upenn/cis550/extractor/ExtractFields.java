@@ -1,37 +1,20 @@
 package edu.upenn.cis550.extractor;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.tika.*;
-import org.apache.tika.exception.*;
-import org.apache.tika.io.*;
-import org.apache.tika.parser.*;
-import org.apache.tika.sax.*;
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
 import org.xml.sax.SAXException;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.tika.metadata.*;
-
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.process.PTBTokenizer;
-import edu.stanford.nlp.simple.*;
 
 /**
- * This is the main class for extracting nodes from the document
+ * This class handles the File, identify suitable parser 
+ * and extract nodes for the graph accordingly
+ * This is a singleton class. Use getInstance method to get an object.
+ * For extracting the nodes, only object of this class is needed.
  * @author Sanidhya
  *
  */
@@ -104,4 +87,5 @@ public class ExtractFields {
 		id = id + 1;
 		return id;
 	}
+	
 }
