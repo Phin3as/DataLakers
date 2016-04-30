@@ -1,8 +1,0 @@
-package edu.upenn.cis550.storage;
-
-import com.sleepycat.persist.PrimaryIndex;
-
-public class DataAccessor {
-	/** Accessors **/
-	public PrimaryIndex<Integer,GraphNode> nodeByID;
-}
