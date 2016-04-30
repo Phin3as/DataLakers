@@ -39,4 +39,11 @@ public class StorageAPI {
 		}
 	}
 	
+	/**
+	 * Close the BerkleyDB environment
+	 */
+	public void closeDB(){
+		myDBEnv.close();
+	}
+	
 }

@@ -37,6 +37,10 @@ public class GraphNode {
 		this.children = children;
 	}
 	
+	public int getNodeID(){
+		return nodeID;
+	}
+	
 	public int getDocumentID() {
 		return documentID;
 	}
