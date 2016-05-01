@@ -2,6 +2,8 @@ package edu.upenn.cis550.storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
@@ -69,5 +71,21 @@ public class BerkleyDBTest {
 //			out.println(item.getURLink());
 //		}
 //		out.close();
+	}
+	
+	public void showAllWords() throws DatabaseException{
+		EntityCursor<InvertedIndex> items = StorageAPI.da.wordByValue.entities();
+		for(InvertedIndex item: items){
+			System.out.println("<------->");
+			String word = item.getWord();
+			System.out.println("\nWord:- " + word);
+			HashSet<Integer> nodeIDs = item.getGraphNodes();
+			Iterator<Integer> iter = nodeIDs.iterator();
+			while(iter.hasNext()){
+				System.out.print(iter.next());
+				System.out.print("\t");
+			}
+			System.out.println("");
+		}
 	}
 }
