@@ -2,6 +2,7 @@ package edu.upenn.cis550.extractor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -78,13 +79,17 @@ public class ExtractFields {
 		
 		String ext = extension();
 		if(ext.equals("json")){
-			json.extractNode(documentID, file, extension(), store);
+			ArrayList<Integer> nodes = json.extractNode(documentID, file, extension(), store);
+			store.putForwardIndex(documentID, nodes);
 		} else if(ext.equals("plain") || ext.equals("pdf")){
-			text.extractNode(documentID, file, extension(), store);
+			ArrayList<Integer> nodes = text.extractNode(documentID, file, extension(), store);
+			store.putForwardIndex(documentID, nodes);
 		} else if(ext.equals("xml")){
-			xml.extractNode(documentID, file, extension(), store);
+			ArrayList<Integer> nodes = xml.extractNode(documentID, file, extension(), store);
+			store.putForwardIndex(documentID, nodes);
 		} else if(ext.equals("csv")){
-			csv.extractNode(documentID, file, extension(), store);
+			ArrayList<Integer> nodes = csv.extractNode(documentID, file, extension(), store);
+			store.putForwardIndex(documentID, nodes);
 		} else {
 			
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");

@@ -32,14 +32,15 @@ public class ExtractXml {
 	private String extension;
 	private StorageAPI store;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
+	private ArrayList<Integer> nodes = new ArrayList<Integer>();
 	
-	public void extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, ParserConfigurationException, SAXException{
+	public ArrayList<Integer> extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, ParserConfigurationException, SAXException{
 		this.dID = dID;
 		this.f = f;
 		this.extension = ext;
 		this.store = db;
 		parseXml();
-		
+		return nodes;
 	}
 	
 	private void parseXml() throws ParserConfigurationException, SAXException, IOException{
@@ -62,6 +63,7 @@ public class ExtractXml {
 		Node in = (Node) doc;
 		node.setChildren(extractXmlNode(in, node.getId(), dID));
 		store.putGraphNode(node);
+		nodes.add(node.getId());
     	map.put(node.getId(), node);
 		
 		for(int i : map.keySet()){
@@ -132,6 +134,7 @@ public class ExtractXml {
 					node.setChildren(localChildren);
 				}
 				store.putGraphNode(node);
+				nodes.add(node.getId());
 				map.put(node.getId(), node);
 //				System.out.println(node.getId() +" --- "+ map.get(node.getId()).getName());
 				
@@ -162,6 +165,7 @@ public class ExtractXml {
 		 			 			 	 null);
 			children.add(node.getId());
 			store.putGraphNode(node);
+			nodes.add(node.getId());
 			map.put(node.getId(), node);
 			
 		}

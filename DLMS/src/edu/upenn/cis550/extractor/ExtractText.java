@@ -32,13 +32,15 @@ public class ExtractText {
 	private String extension;
 	private StorageAPI store;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
+	private ArrayList<Integer> nodes = new ArrayList<Integer>();
 	
-	public void extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, SAXException, TikaException{
+	public ArrayList<Integer> extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, SAXException, TikaException{
 		this.dID = dID;
 		this.f = f;
 		this.extension = ext;
 		this.store = db;
 		parseText();
+		return nodes;
 		
 	}
 	
@@ -54,6 +56,7 @@ public class ExtractText {
 		
 		root.setChildren(tokenize(root.getId()));
 		store.putGraphNode(root);
+		nodes.add(root.getId());
 		map.put(root.getId(), root);
 		
 		for(int i : map.keySet()){
@@ -114,6 +117,7 @@ public class ExtractText {
 	 			 	 			   null);
 	      i = i + 1;
 	      store.putGraphNode(node);
+	      nodes.add(node.getId());
 	      map.put(node.getId(), node);
 	      children.add(node.getId());
 //	      System.out.println(label);
