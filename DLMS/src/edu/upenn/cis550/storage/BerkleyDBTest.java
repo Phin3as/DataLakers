@@ -21,6 +21,7 @@ public class BerkleyDBTest {
 		BerkleyDBTest dbTest = new BerkleyDBTest();
 		try {
 			dbTest.showAllNodes();
+			dbTest.showAllWords();
 		} 
 		catch (DatabaseException dbe) {
 			System.err.println("DatabaseTest: " + dbe.toString());
