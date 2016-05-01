@@ -27,4 +27,11 @@ public class MasterServlet extends HttpServlet{
 		  out.println("</body></html>");
 		  out.close();
 	}
+	
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response) 
+			throws java.io.IOException{
+		String search = request.getParameter("search");
+		System.out.println(search);
+	}
 }
