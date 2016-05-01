@@ -79,13 +79,14 @@ public class ExtractFields {
 		String ext = extension();
 		if(ext.equals("json")){
 			json.extractNode(documentID, file, extension(), store);
-		} else if(ext.equals("plain")){
+		} else if(ext.equals("plain") || ext.equals("pdf")){
 			text.extractNode(documentID, file, extension(), store);
 		} else if(ext.equals("xml")){
 			xml.extractNode(documentID, file, extension(), store);
 		} else if(ext.equals("csv")){
 			csv.extractNode(documentID, file, extension(), store);
 		} else {
+			
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");
 		}
 	}
