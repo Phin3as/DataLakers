@@ -88,5 +88,6 @@ public class BerkleyDBTest {
 			}
 			System.out.println("");
 		}
+		items.close();
 	}
 }
