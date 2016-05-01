@@ -31,14 +31,15 @@ public class ExtractCsv {
 	private StorageAPI store;
 	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
 	private CSVParser parser;
+	private ArrayList<Integer> nodes = new ArrayList<Integer>();
 	
-	public void extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, ParserConfigurationException, SAXException{
+	public ArrayList<Integer> extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, ParserConfigurationException, SAXException{
 		this.dID = dID;
 		this.f = f;
 		this.extension = ext;
 		this.store = db;
 		parseCsv();
-		
+		return nodes;
 	}
 	
 	private void parseCsv() throws IOException{
@@ -92,6 +93,7 @@ public class ExtractCsv {
 	 					 					headNode.getId(),
 	 					 					null);
 				store.putGraphNode(recNode);
+				nodes.add(recNode.getId());
 				map.put(recNode.getId(), recNode);
 				headChildren.add(recNode.getId());
 				j = j + 1;
@@ -99,12 +101,14 @@ public class ExtractCsv {
 			
 			headNode.setChildren(headChildren);
 			store.putGraphNode(headNode);
+			nodes.add(headNode.getId());
 			map.put(headNode.getId(), headNode);
 			headChildren = new ArrayList<Integer>();
 		}
 		
 		fileNode.setChildren(fileChildren);
 		store.putGraphNode(fileNode);
+		nodes.add(fileNode.getId());
 		map.put(fileNode.getId(), fileNode);
 		for (CSVRecord rec : parser) {
 			System.out.println(rec.toString());
