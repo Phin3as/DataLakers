@@ -14,9 +14,10 @@ import com.sleepycat.persist.EntityCursor;
  *
  */
 public class BerkleyDBTest {
-	private static File myDBEnvPath = new File("/home/ubuntu/storage");
+	private static File myDBEnvPath;
 
 	public static void main(String args[]){
+		myDBEnvPath = new File(args[0]);
 		StorageAPI storage = new StorageAPI(myDBEnvPath);
 		BerkleyDBTest dbTest = new BerkleyDBTest();
 		try {
