@@ -49,9 +49,10 @@ public class StorageAPI {
 	public void putInvertedIndex(String word, int nodeID){
 		StringTokenizer tokenizer = new StringTokenizer(word, " \t\n\r\f,.:;'?![]");
 		while(tokenizer.hasMoreTokens()){
-			InvertedIndex index = da.wordByValue.get(tokenizer.nextToken());
+			String token = tokenizer.nextToken();
+			InvertedIndex index = da.wordByValue.get(token);
 			if(index == null){
-				index = new InvertedIndex(tokenizer.nextToken(), nodeID);
+				index = new InvertedIndex(token, nodeID);
 			}else{
 				index.getGraphNodes().add(nodeID);
 			}
