@@ -8,7 +8,7 @@ public class DataAccessor {
 	/** Accessors **/
 	public PrimaryIndex<Integer,GraphNode> nodeByID;
 	public PrimaryIndex<String, InvertedIndex> wordByValue; 
-	
+	public PrimaryIndex<Integer,ForwardIndex> docByID;
 	/**
 	 * Open the indices
 	 * @param store
@@ -20,5 +20,6 @@ public class DataAccessor {
 		/** primary key for graph node class **/
 		nodeByID = store.getPrimaryIndex(Integer.class, GraphNode.class);
 		wordByValue = store.getPrimaryIndex(String.class, InvertedIndex.class);
+		docByID = store.getPrimaryIndex(Integer.class, ForwardIndex.class);
 	}
 }
