@@ -15,7 +15,6 @@ public class test {
 	
 	public static void main(String args[]) throws IOException, SAXException, TikaException, ParserConfigurationException{
 		ExtractFields e = ExtractFields.getInstance();
-//		System.out.println(e.extension());
 		StorageAPI store = new StorageAPI(new File("E:/graph"));
 		e.setDataBase(store);
 		
@@ -24,7 +23,7 @@ public class test {
 		
 //		store.showAllDocs();
 //		store.showAllNodes();
-		store.showAllWords();
+//		store.showAllWords();
 		
 		
 		store.closeDB();

@@ -80,19 +80,21 @@ public class ExtractJson {
 	private ArrayList<Integer> extractJsonNode(JsonNode json, int parentId, int docId) throws JsonProcessingException, IOException{
 		
 		if(json.isArray()){
+
 			ObjectMapper mapper = new ObjectMapper();
-			String[] valset = mapper.readValue(json.toString(), String[].class);
+			JsonNode[] valset = mapper.readValue(json.toString(), JsonNode[].class);
 			int i = 0;
 			ArrayList<Integer> children = new ArrayList<Integer>();
-			for(String val : valset){
+			for(JsonNode val : valset){
 
 				Struct node = new Struct(ExtractFields.generateId(), 
 						 			 	 docId, 
-						 			 	 val,
-						 			 	 "VALUE", 
+						 			 	 val.toString(),
+						 			 	 val.getNodeType().toString(), 
 						 			 	 Integer.toString(i),
 						 			 	 parentId,
 						 			 	 null);
+				node.setChildren(extractJsonNode(val, node.getId(), docId));
 				children.add(node.getId());
 		    	i = i + 1;
 		    	store.putGraphNode(node);
@@ -101,6 +103,7 @@ public class ExtractJson {
 			}
 			
 			return children;
+
 		}
 		
 		if(json.getNodeType().toString().equals("STRING")){
@@ -111,18 +114,19 @@ public class ExtractJson {
 			return null;
 		}
 		
+		if(json.isNull()){
+			return null;
+		}
 		
 		JsonFactory fac = new JsonFactory();
 		ObjectMapper mapper = new ObjectMapper(fac);
 		JsonNode root = mapper.readTree(json.toString());
-		
 		
 		ArrayList<Integer> children = new ArrayList<Integer>();
 		Iterator<Map.Entry<String,JsonNode>> fieldsIterator = root.fields();
 	    while (fieldsIterator.hasNext()) {
 	    	
 	    	Map.Entry<String,JsonNode> field = fieldsIterator.next();
-	    	
 	    	Struct node = new Struct(ExtractFields.generateId(), 
 	    						 	 docId, 
 	    						 	 field.getKey(),
@@ -132,12 +136,10 @@ public class ExtractJson {
 	    						 	 null);
 	    	
 	    	children.add(node.getId());
-
 	    	node.setChildren(extractJsonNode(field.getValue(), node.getId(), docId));
 	    	store.putGraphNode(node);
 	    	nodes.add(node.getId());
 	    	map.put(node.getId(), node);
-//	    	System.out.println(node.getId() +" --- "+ map.get(node.getId()).getName());
 	    }
 	    
 	    return children;
