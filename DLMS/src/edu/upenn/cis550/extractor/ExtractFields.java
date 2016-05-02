@@ -87,7 +87,7 @@ public class ExtractFields {
 		} else if(ext.equals("xml") || ext.equals("html")){
 			ArrayList<Integer> nodes = xml.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
-		} else if(ext.equals("csv") || ext.equals("xls")){
+		} else if(ext.equals("csv")){
 			ArrayList<Integer> nodes = csv.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
 		} else {
