@@ -70,6 +70,11 @@ public class StorageAPI {
 		da.docByID.put(forwardIndex);
 	}
 	
+	public void putDocument(long documentID, String type, String user){
+		Document document = new Document(documentID, type, user);
+		da.documentByID.put(document);
+	}
+	
 	public List<Integer> getDocNodes(int docID){
 		return da.docByID.get(docID).getDocNodes();
 	}
