@@ -2,6 +2,7 @@ package edu.upenn.cis550.extractor;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,6 +15,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import edu.upenn.cis550.storage.StorageAPI;
@@ -46,10 +49,23 @@ public class ExtractXml {
 	private void parseXml() throws ParserConfigurationException, SAXException, IOException{
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		dbFactory.setValidating(false);
+		dbFactory.setNamespaceAware(false);
+		
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		dBuilder.setEntityResolver(new EntityResolver() {
+	        @Override
+	        public InputSource resolveEntity(String publicId, String systemId)
+	                throws SAXException, IOException {
+	            if (systemId.contains(".dtd")) {
+	                return new InputSource(new StringReader(""));
+	            } else {
+	                return null;
+	            }
+	        }
+	    });
+		
 		Document doc = dBuilder.parse(f);
-//		Element root = doc.getDocumentElement();
-//		root.normalize();
 		
 		//Document Structure
 		Struct node = new Struct(ExtractFields.generateId(), 
@@ -136,7 +152,6 @@ public class ExtractXml {
 				store.putGraphNode(node);
 				nodes.add(node.getId());
 				map.put(node.getId(), node);
-//				System.out.println(node.getId() +" --- "+ map.get(node.getId()).getName());
 				
 			}
 		}

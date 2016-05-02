@@ -83,7 +83,6 @@ public class ExtractText {
 	}
 	
 	
-	
 	private StringReader getReader() throws IOException, SAXException, TikaException{
 		
 //		Tika tika = new Tika();
