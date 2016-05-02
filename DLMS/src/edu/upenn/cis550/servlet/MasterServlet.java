@@ -1,5 +1,6 @@
 package edu.upenn.cis550.servlet;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
@@ -17,20 +18,19 @@ public class MasterServlet extends HttpServlet{
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws java.io.IOException{
+			throws IOException {
 		PrintWriter out = response.getWriter();
-		  out.println("<!DOCTYPE html>"); // HTML 5
-		  out.println("<html><head>");
-		  out.println("</head>");
-		  out.println("<body>");
-		  out.println("Request Received!");
-		  out.println("</body></html>");
-		  out.close();
+		out.println("<!DOCTYPE html>"); // HTML 5
+		out.println("<html><head>");
+		out.println("</head>");
+		out.println("<body>");
+		out.println("Request Received!");
+		out.println("</body></html>");
+		out.close();
 	}
-	
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) 
-			throws java.io.IOException{
+			throws IOException{
 		String search = request.getParameter("search");
 		System.out.println(search);
 	}
