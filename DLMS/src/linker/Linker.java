@@ -48,12 +48,18 @@ public class Linker {
 
 	private void printNodes(StorageAPI store, GraphNode node, HashSet<Integer> linkedNodes) {
 		GraphNode linkedNode=null;
-		System.out.println("New Link "+linkedNodes.size());
-		System.out.println("node ("+node.getNodeID()+") : "+node.getName()+","+node.getValue());
+
+//		System.out.println("New Link "+linkedNodes.size());
+//		System.out.println("node ("+node.getNodeID()+") : "+node.getName()+","+node.getValue());
 //		for (Integer nodeID : linkedNodes) {
 //			linkedNode = store.getGraphNode(nodeID);
 //			System.out.println("node ("+linkedNode.getNodeID()+") : "+linkedNode.getName()+","+linkedNode.getValue());
 //		}
-		
+
+		System.out.println("New Link ("+node.getNodeID()+") : "+linkedNodes.size());
+		for (Integer nodeID : linkedNodes) {
+			System.out.println(nodeID);
+		}
+		System.out.println();
 	}
 }
