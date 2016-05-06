@@ -37,7 +37,17 @@ public class StorageAPI {
 		da = new DataAccessor(myDBEnv.getEntityStore());
 	}
 	
+	/**
+	 * Close the BerkleyDB environment
+	 */
+	public void closeDB(){
+		myDBEnv.close();
+	}
 	
+	/**
+	 * Put graphNode in the database
+	 * @param node
+	 */
 	public void putGraphNode(Struct node){
 		GraphNode graphNode = new GraphNode(node.getId(),node.getDocumentID(),node.getName(),node.getType(),
 									node.getValue(),node.getParent(),node.getChildren());
@@ -51,6 +61,11 @@ public class StorageAPI {
 		da.nodeByID.put(graphNode);
 	}
 	
+	/**
+	 * Create and put inverted index in the database
+	 * @param word
+	 * @param nodeID
+	 */
 	public void putInvertedIndex(String word, int nodeID){
 		StringTokenizer tokenizer = new StringTokenizer(word, " \t\n\r\f,.:;'?![]");
 		while(tokenizer.hasMoreTokens()){
@@ -65,20 +80,41 @@ public class StorageAPI {
 		}
 	}
 	
+	/**
+	 * Create and put forward index in the database
+	 * @param docID
+	 * @param docNodes
+	 */
 	public void putForwardIndex(int docID, List<Integer> docNodes){
 		ForwardIndex forwardIndex = new ForwardIndex(docID,docNodes);
 		da.docByID.put(forwardIndex);
 	}
 	
+	/**
+	 * Putting a new document in the database
+	 * @param documentID
+	 * @param type
+	 * @param user
+	 */
 	public void putDocument(long documentID, String type, String user){
 		Document document = new Document(documentID, type, user);
 		da.documentByID.put(document);
 	}
 	
+	/**
+	 * Get all nodes present in a doc
+	 * @param docID
+	 * @return
+	 */
 	public List<Integer> getDocNodes(int docID){
 		return da.docByID.get(docID).getDocNodes();
 	}
 	
+	/**
+	 * Validate name parameter
+	 * @param type
+	 * @return
+	 */
 	public boolean checkName(String type){
 		if(type.equals("RECORD")){
 			return false;
@@ -86,6 +122,12 @@ public class StorageAPI {
 		return true;
 	}
 	
+	/**
+	 * Validate value parameter
+	 * @param value
+	 * @param type
+	 * @return
+	 */
 	public boolean checkValue(String value, String type){
 		if(value == null){
 			return false;
@@ -105,14 +147,11 @@ public class StorageAPI {
 		
 		return true;
 	}
+	
 	/**
-	 * Close the BerkleyDB environment
+	 * Helper function for testing inverted index
+	 * @throws DatabaseException
 	 */
-	public void closeDB(){
-		myDBEnv.close();
-	}
-	
-	
 	public void showAllWords() throws DatabaseException{
 		EntityCursor<InvertedIndex> items = da.wordByValue.entities();
 		for(InvertedIndex item: items){
@@ -130,6 +169,10 @@ public class StorageAPI {
 		items.close();
 	}
 	
+	/**
+	 * Helper function for testing forward index
+	 * @throws DatabaseException
+	 */
 	public void showAllDocs() throws DatabaseException{
 		EntityCursor<ForwardIndex> items = da.docByID.entities();
 		for(ForwardIndex item: items){
@@ -146,6 +189,11 @@ public class StorageAPI {
 		items.close();
 	}
 	
+	/**
+	 * Helper function for testing graph nodes
+	 * @throws DatabaseException
+	 * @throws IOException
+	 */
 	public void showAllNodes() throws DatabaseException, IOException{
 		/** Get a cursor that will walk every
 		 *  node object in the store
