@@ -1,10 +1,11 @@
 ##################### How to query/access the database ####################
 
-1. Create an object of the StorageAPI using the default constructor.
-	StorageAPI storage = new StorageAPI();
+1. Create an object of the StorageAPI.
+	File storageDir = new File(//specify the path of the storage directory here);
+	StorageAPI store = new StorageAPI(storageDir);
 	
 2. VERY IMPORTANT:- At the end, do not forget to close the storage
-	storage.close();
+	store.close();
 	
 Query Functions:
 
