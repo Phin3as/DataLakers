@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<EMSDemographicDataSet xmlns='http://www.nemsis.org' 
+                       xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+                       xsi:schemaLocation='http://www.nemsis.org http://www.nemsis.org/media/XSD/EMSDemographicDataSet.xsd'>
+    
+    <!-- Example County -->
+
+    <!-- ELEMENT - D01 Agency General Information; ATTRIBUTE VALUES - Active/Inactive; Date-->
+    <D01 Status='A' Date='2006-12-08'> 
+        
+        <!-- ELEMENT - state-assigned EMS Agency Number ; VALUE - -->
+        <D01_01>9320403</D01_01>		
+        
+        
+        
+        <!-- ELEMENT -  EMS Agency State's 2 digit FIPS code; ATTRIBUTE VALUES - Active/Inactive; Date-->
+        <D01_03 Status='A' Date='2006-12-08'>01</D01_03> 	
+        
+        
+        
+        
+        <!-- ELEMENT - EMS Agency County's 5 digit FIPS code; ATTRIBUTE VALUES - Active/Inactive; Date-->
+        <D01_04 Status='A' Date='2006-12-08'>12345</D01_04> 
+        
+        
+        
+        
+        
+        <!-- ELEMENT - Level of Service; VALUE - EMT-Paramedic
+                    6090 EMT-Basic
+                    6100 EMT-Intermediate
+                    6110 EMT-Paramedic
+                    6111 Nurse
+                    6112 Physician
+                    6120 First Responder
+         -->
+        <D01_07>6110</D01_07> 
+        
+        
+        
+        
+        <!-- ELEMENT - OrganizationalType; VALUE - Governmental, Non-Fire
+        	          5810	Community, Non-Profit	
+        	          5820	Fire Department
+        	          5830	Governmental, Non-Fire	
+        	          5840	Hospital
+        	          5850	Private, Non_Hospital	
+        	          5860	Tribal
+         -->      
+        <D01_08>5830</D01_08> 
+        
+        
+        
+        
+        
+        
+        
+        <!-- ELEMENT - Organization Status; VALUE - Non-Volunteer 
+                  	5870	Mixed	5880	Non-Volunteer
+          	        5890	Volunteer
+         -->
+        <D01_09>5880</D01_09> 
+        
+        <D01_10_0>
+            
+            <!-- ELEMENT - Statistical Year -->
+            <D01_10>2006</D01_10>	
+            
+            <!-- ELEMENT - Total Service Size Area; DEFINITION - Total Square miles  -->
+            <D01_12>263</D01_12>		
+            
+            <!-- ELEMENT - Total Service Area Population; DEFINITION - Total population in service area --> 
+            <D01_13>33603</D01_13>	
+            
+            <!-- ELEMENT - 911 Call Volume Per Year -->
+            <D01_14>5734</D01_14>	
+            
+            <!-- ELEMENT - EMS Dispatch Volume Per Year --> 
+            <D01_15>5734</D01_15>	
+            
+            <!-- ELEMENT - EMS Transport Volume Per Year --> 
+            <D01_16>5600</D01_16>	
+            
+            <!-- ELEMENT - EMS Patient Contact Volume Per Year -->
+            <D01_17>3319</D01_17>	
+            
+        </D01_10_0>
+        
+        <!-- ELEMENT - EMS Agency Time Zone; VALUE - GMT-5:00 Eastern Time 	
+              5900	GMT-11:00 Midway Island, Samoa	
+              5910	GMT-10:00 Hawaii
+            	5920	GMT-09:00 Alaska	
+            	5930	GMT-08:00 Pacific Time
+            	5940	GMT-07:00 Mountain Time	
+            	5950	GMT-06:00 Central Time
+            	5960	GMT-05:00 Eastern Time	
+            	5970	GMT-04:00 Atlantic Time
+        -->
+        <D01_19>5960</D01_19>		
+        
+        <!-- ELEMENT - National Provider Identifier; VALUE - Not Reporting
+          String
+        	-25	Not Applicable	-20	Not Recorded
+	        -15	Not Reporting	-10	Not Known
+	        -5	Not Available
+        -->
+        <D01_21>-15</D01_21>		
+    </D01>
+    
+    <!-- ELEMENT - Agency Contact Information; ATTRIBUTE VALUES -  Active/InActive; Date -->
+    <D02 Status='A' Date='2006-12-08'> 	
+        <D02_04_0>
+            
+            <!-- ELEMENT - Agency Contact Zip Code; --> 
+            <D02_07>12345-6789</D02_07>	
+            
+        </D02_04_0>
+    </D02>
+
+    
+</EMSDemographicDataSet>
