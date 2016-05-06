@@ -2,6 +2,7 @@ package edu.upenn.cis550.storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -61,6 +62,13 @@ public class StorageAPI {
 		da.nodeByID.put(graphNode);
 	}
 	
+	public GraphNode getGraphNode(int nodeID){
+		GraphNode node = da.nodeByID.get(nodeID);
+		if(node == null){
+			return null;
+		}
+		return node;
+	}
 	/**
 	 * Create and put inverted index in the database
 	 * @param word
@@ -81,6 +89,19 @@ public class StorageAPI {
 	}
 	
 	/**
+	 * Returns all nodes for a given word
+	 * @param word
+	 * @return
+	 */
+	public HashSet<Integer> getInvertedIndex(String word){
+		InvertedIndex invertedIndexSet = da.wordByValue.get(word);
+		if(invertedIndexSet == null){
+			return null;
+		}
+		return invertedIndexSet.getGraphNodes();
+	}
+	
+	/**
 	 * Create and put forward index in the database
 	 * @param docID
 	 * @param docNodes
@@ -88,6 +109,15 @@ public class StorageAPI {
 	public void putForwardIndex(int docID, List<Integer> docNodes){
 		ForwardIndex forwardIndex = new ForwardIndex(docID,docNodes);
 		da.docByID.put(forwardIndex);
+	}
+	
+	/**
+	 * Get all nodes present in a doc
+	 * @param docID
+	 * @return
+	 */
+	public List<Integer> getDocNodes(int docID){
+		return da.docByID.get(docID).getDocNodes();
 	}
 	
 	/**
@@ -99,15 +129,6 @@ public class StorageAPI {
 	public void putDocument(long documentID, String type, String user){
 		Document document = new Document(documentID, type, user);
 		da.documentByID.put(document);
-	}
-	
-	/**
-	 * Get all nodes present in a doc
-	 * @param docID
-	 * @return
-	 */
-	public List<Integer> getDocNodes(int docID){
-		return da.docByID.get(docID).getDocNodes();
 	}
 	
 	/**
@@ -146,6 +167,33 @@ public class StorageAPI {
 		}
 		
 		return true;
+	}
+
+	/**
+	 * Returns all the graph nodeIDs
+	 * @return
+	 */
+	public List<Integer> getAllNodes(){
+		List<Integer> nodesList = new ArrayList<Integer>();
+		EntityCursor<GraphNode> items = da.nodeByID.entities();
+		
+		for(GraphNode item: items){
+			nodesList.add(item.getNodeID());
+		}
+		return nodesList;
+	}
+	
+	/**
+	 * Returns all the docIDs
+	 * @return
+	 */
+	public List<Integer> getAllDocs(){
+		List<Integer> docsList = new ArrayList<Integer>();
+		EntityCursor<ForwardIndex> items = da.docByID.entities();
+		for(ForwardIndex item: items){
+			docsList.add(item.getDocID());
+		}
+		return docsList;
 	}
 	
 	/**

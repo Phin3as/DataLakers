@@ -1,0 +1,29 @@
+##################### How to query/access the database ####################
+
+1. Create an object of the StorageAPI using the default constructor.
+	StorageAPI storage = new StorageAPI();
+	
+2. VERY IMPORTANT:- At the end, do not forget to close the storage
+	storage.close();
+	
+Query Functions:
+
+- Getting all the nodes
+	List<Integer> nodes = store.getAllNodes();
+	
+- Getting all the docs
+	List<Integer> docs = store.getAllDocs();
+
+- Getting Inverted Index for a word
+	HashSet<Integer> invertedIndex = store.getInvertedIndex(word);
+	
+- Getting all nodes present in a doc (forward index)
+	List<Integer> docNodes = store.getDocNodes(docID);
+	
+- Getting a graph node
+	GraphNode node = store.getGraphNode(nodeID);
+
+- Accessing the GraphNode data structure
+	-Go through the file GraphNode.java to see the getter functions
+	-Example: int parentID = node.getParent();
+	
