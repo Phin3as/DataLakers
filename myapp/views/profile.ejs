@@ -1,0 +1,50 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>DATALAKERS</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> 
+    <style>
+        body        { padding-top:80px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> welcome <%= user.local.email %><br></h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="">
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Local</h3>
+
+                    <p>
+                        <strong>id</strong>: <%= user._id %><br>
+                        <strong>email</strong>: <%= user.local.email %><br>
+                        <form action="/profile" method="post" enctype="multipart/form-data">                         
+                        <input type="file" name="file" id="file">
+                        <input type="submit" value="Upload" name="submit">
+                        </form>
+                        <form action ="/profile" method="post">
+                        <button type="submit" class="btn btn-warning btn-lg">Extract</button>
+                        </form>
+                        <form>
+                         SEARCH KEYWORDS:<br>
+                         <input type="text" name=""><br>  
+                         </form>                         
+                    </p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

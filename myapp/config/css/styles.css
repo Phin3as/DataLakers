@@ -1,0 +1,16 @@
+.background{
+			background-image: url('../img/mani6.jpg');
+			background-size : 100%;
+			background-repeat : no repeat;
+			padding: 80px;
+		}
+		
+.block {
+			padding:30px;
+			margin-bottom:30px;
+			font-size:21px;
+			font-weight:200;
+			line-height:2.1428571435;
+			color:inherit;
+			
+		}
