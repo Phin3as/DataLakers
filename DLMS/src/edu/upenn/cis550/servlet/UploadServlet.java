@@ -16,6 +16,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
+import edu.upenn.cis550.extractor.Extract;
+
 /**
  * Helper servlet to upload files to aws S3
  * @author Jitesh
@@ -25,7 +27,7 @@ public class UploadServlet extends HttpServlet{
 	static final long serialVersionUID = 455555002;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws IOException {
+			throws IOException, ServletException {
 		System.out.println("Upload Servlet GET Method");
 	}
 	
@@ -51,6 +53,8 @@ public class UploadServlet extends HttpServlet{
 	                }
 	                try {
 						item.write(uploadFile);
+						//Run extractor
+						(new Extract()).start();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
