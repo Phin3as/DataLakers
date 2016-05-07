@@ -11,12 +11,12 @@ import edu.upenn.cis550.storage.StorageAPI;
 
 public class Linker {
 	
-	static final int THREAPOOL_SIZE=5;
+	static final int THREAPOOL_SIZE=20;
 	
 	boolean linker(Integer docID) {
 		System.out.println("Linker.linker():BEGIN:");
 
-		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\sm");
+		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\graph");
 		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
 		
@@ -56,7 +56,7 @@ public class Linker {
 		
 		ExecutorService executor = Executors.newFixedThreadPool(THREAPOOL_SIZE);
 		
-		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\sm");
+		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\graph");
 		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
 		
@@ -83,9 +83,9 @@ public class Linker {
 //		}
 
 		System.out.println("New Link ("+node.getNodeID()+") : "+linkedNodes.size());
-		for (Integer nodeID : linkedNodes) {
-			System.out.println(nodeID);
-		}
-		System.out.println();
+//		for (Integer nodeID : linkedNodes) {
+//			System.out.println(nodeID);
+//		}
+//		System.out.println();
 	}
 }
