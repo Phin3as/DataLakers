@@ -19,21 +19,8 @@ module.exports = function(app, passport) {
     //########### Making changes here for AWS S3
     
     app.post('/profile', function (req, res) {
-        var file = req.files.file;
-        //console.log(req.user);
-        //console.log("Here I mmmmmmmmmmm");
-        var stream = fs.createReadStream(file.path);
-        return s3fsImpl.writeFile(file.originalFilename, stream).then(function () {
-            fs.unlink(file.path, function (err) {
-                if (err) {
-                    console.error(err);
-                }
-            });
-            res.status(200);
-            res.render('back.ejs', {
-                user : req.user // get the user out of session and pass to template
-            });
-        });
+        res.redirect(307, 'http://localhost:8080/DLMS' + req.path);
+        console.log(res);
     });
 
     // =====================================
