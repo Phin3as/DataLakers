@@ -1,4 +1,4 @@
-package linker;
+package edu.upenn.cis550.linker;
 
 import java.io.File;
 import java.util.HashSet;
@@ -73,7 +73,7 @@ public class Linker {
 		return true;
 	}
 	private void printNodes(StorageAPI store, GraphNode node, HashSet<Integer> linkedNodes) {
-		GraphNode linkedNode=null;
+//		GraphNode linkedNode=null;
 
 //		System.out.println("New Link "+linkedNodes.size());
 //		System.out.println("node ("+node.getNodeID()+") : "+node.getName()+","+node.getValue());

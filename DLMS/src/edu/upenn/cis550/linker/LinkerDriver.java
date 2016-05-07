@@ -1,4 +1,4 @@
-package linker;
+package edu.upenn.cis550.linker;
 
 public class LinkerDriver {
 
@@ -7,7 +7,7 @@ public class LinkerDriver {
 		Linker linker = new Linker();
 		
 //		linker.threadedLinker(1);
-//		linker.linker(1);
+		linker.linker(1);
 		
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
