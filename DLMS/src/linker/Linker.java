@@ -3,15 +3,20 @@ package linker;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
 
 public class Linker {
+	
+	static final int THREAPOOL_SIZE=5;
+	
 	boolean linker(Integer docID) {
 		System.out.println("Linker.linker():BEGIN:");
 
-		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\graph");
+		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\sm");
 		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
 		
@@ -43,9 +48,30 @@ public class Linker {
 		//update dbs
 		store.closeDB();
 		System.out.println("Linker.linker()::END");
-		return false;
+		return true;
 	}
 
+	boolean threadedLinker(Integer docID) {
+		System.out.println("Linker.threadedLinker()::BEGIN");
+		
+		ExecutorService executor = Executors.newFixedThreadPool(THREAPOOL_SIZE);
+		
+		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\sm");
+		StorageAPI store = new StorageAPI(storageDir);
+		List<Integer> docNodes = store.getDocNodes(docID);
+		
+		for (Integer nodeID : docNodes) {
+			Runnable worker = new WorkerThread(store,nodeID);
+			executor.execute(worker);
+		}
+		
+		executor.shutdown();
+        while (!executor.isTerminated()) {}
+        
+		store.closeDB();
+		System.out.println("Linker.threadedLinker()::END");
+		return true;
+	}
 	private void printNodes(StorageAPI store, GraphNode node, HashSet<Integer> linkedNodes) {
 		GraphNode linkedNode=null;
 
