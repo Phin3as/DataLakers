@@ -9,7 +9,7 @@ import java.util.List;
 
 import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
-import edu.upenn.cis550.util.Constants;
+import edu.upenn.cis550.utils.Constants;
 
 
 public class Search {
@@ -41,7 +41,7 @@ public class Search {
 		List<Integer> nodeIDsForString1 = new ArrayList<Integer>();
 		List<Integer> nodeIDsForString2 = new ArrayList<Integer>();
 		
-		File storageDir = new File(Constants.DIR_PATH);
+		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
 		
 		//generating list of nodes for string1
@@ -106,7 +106,7 @@ public class Search {
 		List<Integer> initialResults = new ArrayList<Integer>();
 		List<Integer> intermediateResults = null;
 		
-		File storageDir = new File(Constants.DIR_PATH);
+		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
 	
 		invertedIndex = store.getInvertedIndex(string);
