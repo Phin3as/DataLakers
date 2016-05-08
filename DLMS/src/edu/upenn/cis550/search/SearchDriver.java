@@ -9,16 +9,18 @@ public class SearchDriver {
 		System.out.println("SearchDriver.main()::BEGIN");
 		
 		Search search = new Search();
-		Object ret = search.searchGraph("","Jitesh");
+		Object ret = search.searchGraph("","Systems");
 		if (ret instanceof List<?>) {
-			ArrayList<Integer> data = (ArrayList<Integer>)ret;
-			for (Integer nodeID : data) {
-				System.out.println(nodeID);
+			List<List<Integer>> paths = (List<List<Integer>>)ret;
+			
+			for (List<Integer> path : paths) {
+				System.out.print("Output Path : ");
+				for (Integer data : path) {
+					System.out.print(data+" ");
+				}
+				System.out.println();
 			}
-			System.out.println("frequency : "+data.size());
-			if ( data.contains(78827) ) {
-				System.out.println("FOUND!");
-			}
+			System.out.println("frequency : "+paths.size());
 		}
 		System.out.println("SearchDriver.main()::END");
 	}

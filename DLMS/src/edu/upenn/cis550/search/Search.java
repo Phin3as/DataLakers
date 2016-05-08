@@ -2,7 +2,9 @@ package edu.upenn.cis550.search;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import edu.upenn.cis550.storage.GraphNode;
@@ -96,7 +98,9 @@ public class Search {
 		}
 	}
 
-	private List<Integer> searchQuery(String uid, String string) {
+	private List<List<Integer>> searchQuery(String uid, String string) {
+		List<List<Integer>> output = new ArrayList<List<Integer>>();
+		
 		HashSet<Integer> invertedIndex = null;
 		List<Integer> searchResults = new ArrayList<Integer>();
 		List<Integer> initialResults = new ArrayList<Integer>();
@@ -120,13 +124,67 @@ public class Search {
 				searchResults.addAll(intermediateResults);
 			}
 		}
+		List<Integer> finalResults = new ArrayList<Integer>(new LinkedHashSet<Integer>(searchResults));
+		List<Integer> path;
+		for (Integer nodeID : finalResults) {
+			path = getPathFromRoot(store,nodeID);
+			output.add(path);
+			printList(store,path);
+		}
 		store.closeDB();
-		return searchResults;
+		return output;
+	}
+
+	private void printList(StorageAPI store, List<Integer> path) {
+		System.out.println("New Path:");
+		GraphNode node;
+		for (Integer data : path) {
+			node = store.getGraphNode(data);
+			System.out.println(data+":("+node.getName()+","+node.getValue()+","+node.getType()+")");
+		}
+		
+	}
+
+	private List<Integer> getPathFromRoot(StorageAPI store, Integer nodeID) {
+		List<Integer> pathFromRoot = new ArrayList<Integer>();
+		GraphNode node = store.getGraphNode(nodeID);
+		pathFromRoot.add(nodeID);
+		
+		Integer pId;
+		while(node.getParent()!=-1) {
+			pId = node.getParent();
+			pathFromRoot.add(pId);
+			node = store.getGraphNode(pId);
+		}
+//		findPath(node.getNodeID(),nodeID,store,pathFromRoot);
+		Collections.reverse(pathFromRoot);
+		return pathFromRoot;
+	}
+
+	private boolean findPath(Integer documentID, Integer nodeID, StorageAPI store, List<Integer> pathFromRoot) {
+		pathFromRoot.add(documentID);
+		if (documentID==nodeID) {
+			return true;
+		}
+		boolean status;
+		
+		GraphNode docNode = store.getGraphNode(documentID);
+		if (docNode.getChildren()==null) {
+			pathFromRoot.remove(documentID);
+			return false;
+		}
+		for (Integer child : docNode.getChildren()) {
+			status = findPath(child, nodeID, store, pathFromRoot);
+			if (status) {
+				return true;
+			}
+		}
+		pathFromRoot.remove(documentID);
+		return false;
 	}
 
 	private void checkPermission(String uid, List<Integer> results) {
-		//TODO : check permissions
-		
+		//TODO : check permissions 
 	}
 
 	private List<Integer> getConnectedNodes(StorageAPI store, Integer nodeID) {
