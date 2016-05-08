@@ -29,9 +29,71 @@ public class Search {
 		return ret_value;
 	}
 
-	private List<List<Integer>> searchQuery(String uid, String string, String string2) {
+	private List<List<Integer>> searchQuery(String uid, String string1, String string2) {
+		List<List<Integer>> paths = new ArrayList<List<Integer>>();
 		
-		return null;
+		GraphNode node = null;
+		HashSet<Integer> invertedIndex = null;
+		List<GraphNode> nodesForString1 = new ArrayList<GraphNode>();
+		List<GraphNode> nodesForString2 = new ArrayList<GraphNode>();
+		List<Integer> nodeIDsForString1 = new ArrayList<Integer>();
+		List<Integer> nodeIDsForString2 = new ArrayList<Integer>();
+		
+		File storageDir = new File(Constants.DIR_PATH);
+		StorageAPI store = new StorageAPI(storageDir);
+		
+		//generating list of nodes for string1
+		invertedIndex = store.getInvertedIndex(string1);
+		nodeIDsForString1.addAll(invertedIndex);
+		checkPermission(uid, nodeIDsForString1);
+		for (Integer nodeID : nodeIDsForString1) {
+			node = store.getGraphNode(nodeID);
+			if (node!=null) {
+				nodesForString1.add(node);
+			}
+		}
+		System.out.println("String : "+string1+"\nNodes : "+nodeIDsForString1.size());
+		
+		//generating list of nodes for string2
+		invertedIndex = store.getInvertedIndex(string2);
+		nodeIDsForString2.addAll(invertedIndex);
+		checkPermission(uid, nodeIDsForString2);
+		for (Integer nodeID : nodeIDsForString2) {
+			node = store.getGraphNode(nodeID);
+			if (node!=null) {
+				nodesForString2.add(node);
+			}
+		}
+		System.out.println("String : "+string2+"\nNodes : "+nodeIDsForString2.size());
+		
+		//algo to reach any node for string2 from any node in string1
+		List<Integer> tempPath = new ArrayList<Integer>();
+		for (Integer gNodeID : nodeIDsForString1) {
+			tempPath.add(gNodeID);
+			findGraphPathRecursive(0,gNodeID,nodeIDsForString2,Constants.DEPTH,tempPath,paths,uid,store);
+			tempPath.remove(gNodeID);
+		}
+		store.closeDB();
+		
+		return paths;
+	}
+
+	private void findGraphPathRecursive(int currentDepth, Integer gNodeID, List<Integer> nodeIDsForString2, int depth, List<Integer> tempPath, List<List<Integer>> paths, String uid, StorageAPI store) {
+		if (currentDepth>depth)
+			return;
+		List<Integer> connectedNodes = new ArrayList<Integer>();
+		connectedNodes = getConnectedNodes(store, gNodeID);
+		checkPermission(uid, connectedNodes);
+		for (Integer connectedNodeID : connectedNodes) {
+			tempPath.add(gNodeID);
+			if ( nodeIDsForString2.contains(connectedNodeID) ) {
+				paths.add(new ArrayList<Integer>(tempPath));
+			}
+			else {
+				findGraphPathRecursive(currentDepth+1, connectedNodeID, nodeIDsForString2, Constants.DEPTH, tempPath, paths, uid, store);
+			}
+			tempPath.remove(gNodeID);
+		}
 	}
 
 	private List<Integer> searchQuery(String uid, String string) {
