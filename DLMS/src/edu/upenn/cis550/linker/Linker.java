@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
-import edu.upenn.cis550.util.Constants;
+import edu.upenn.cis550.utils.Constants;
 
 public class Linker {
 	
@@ -17,7 +17,7 @@ public class Linker {
 	boolean linker(Integer docID) {
 		System.out.println("Linker.linker():BEGIN:");
 
-		File storageDir = new File(Constants.DIR_PATH);
+		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
 		
@@ -57,7 +57,7 @@ public class Linker {
 		
 		ExecutorService executor = Executors.newFixedThreadPool(THREAPOOL_SIZE);
 		
-		File storageDir = new File(Constants.DIR_PATH);
+		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
 		
