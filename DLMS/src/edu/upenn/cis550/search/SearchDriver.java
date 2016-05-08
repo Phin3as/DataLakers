@@ -1,7 +1,7 @@
 package edu.upenn.cis550.search;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchDriver {
 
@@ -9,9 +9,9 @@ public class SearchDriver {
 		System.out.println("SearchDriver.main()::BEGIN");
 		
 		Search search = new Search();
-		Object ret = search.searchGraph("","Washington");
-		if (ret instanceof Set<?>) {
-			HashSet<Integer> data = (HashSet<Integer>)ret;
+		Object ret = search.searchGraph("","Jitesh");
+		if (ret instanceof List<?>) {
+			ArrayList<Integer> data = (ArrayList<Integer>)ret;
 			for (Integer nodeID : data) {
 				System.out.println(nodeID);
 			}
