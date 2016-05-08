@@ -1,9 +1,13 @@
 package edu.upenn.cis550.search;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
+import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
+import edu.upenn.cis550.util.Constants;
 
 
 public class Search {
@@ -16,7 +20,7 @@ public class Search {
 			ret_value=searchQuery(uid,queryKeys[0]);
 		}
 		else if (queryKeys.length == 2) {
-			searchQuery(uid, queryKeys[0], queryKeys[1]);
+			ret_value = searchQuery(uid, queryKeys[0], queryKeys[1]);
 			
 		}
 		else {
@@ -25,18 +29,121 @@ public class Search {
 		return ret_value;
 	}
 
-	private void searchQuery(String uid, String string, String string2) {
+	private List<List<Integer>> searchQuery(String uid, String string1, String string2) {
+		List<List<Integer>> paths = new ArrayList<List<Integer>>();
 		
+		GraphNode node = null;
+		HashSet<Integer> invertedIndex = null;
+		List<GraphNode> nodesForString1 = new ArrayList<GraphNode>();
+		List<GraphNode> nodesForString2 = new ArrayList<GraphNode>();
+		List<Integer> nodeIDsForString1 = new ArrayList<Integer>();
+		List<Integer> nodeIDsForString2 = new ArrayList<Integer>();
+		
+		File storageDir = new File(Constants.DIR_PATH);
+		StorageAPI store = new StorageAPI(storageDir);
+		
+		//generating list of nodes for string1
+		invertedIndex = store.getInvertedIndex(string1);
+		nodeIDsForString1.addAll(invertedIndex);
+		checkPermission(uid, nodeIDsForString1);
+		for (Integer nodeID : nodeIDsForString1) {
+			node = store.getGraphNode(nodeID);
+			if (node!=null) {
+				nodesForString1.add(node);
+			}
+		}
+		System.out.println("String : "+string1+"\nNodes : "+nodeIDsForString1.size());
+		
+		//generating list of nodes for string2
+		invertedIndex = store.getInvertedIndex(string2);
+		nodeIDsForString2.addAll(invertedIndex);
+		checkPermission(uid, nodeIDsForString2);
+		for (Integer nodeID : nodeIDsForString2) {
+			node = store.getGraphNode(nodeID);
+			if (node!=null) {
+				nodesForString2.add(node);
+			}
+		}
+		System.out.println("String : "+string2+"\nNodes : "+nodeIDsForString2.size());
+		
+		//algo to reach any node for string2 from any node in string1
+		List<Integer> tempPath = new ArrayList<Integer>();
+		for (Integer gNodeID : nodeIDsForString1) {
+			tempPath.add(gNodeID);
+			findGraphPathRecursive(0,gNodeID,nodeIDsForString2,Constants.DEPTH,tempPath,paths,uid,store);
+			tempPath.remove(gNodeID);
+		}
+		store.closeDB();
+		
+		return paths;
 	}
 
-	private HashSet<Integer> searchQuery(String uid, String string) {
-		HashSet<Integer> invertedIndex = null;
+	private void findGraphPathRecursive(int currentDepth, Integer gNodeID, List<Integer> nodeIDsForString2, int depth, List<Integer> tempPath, List<List<Integer>> paths, String uid, StorageAPI store) {
+		if (currentDepth>depth)
+			return;
+		List<Integer> connectedNodes = new ArrayList<Integer>();
+		connectedNodes = getConnectedNodes(store, gNodeID);
+		checkPermission(uid, connectedNodes);
+		for (Integer connectedNodeID : connectedNodes) {
+			tempPath.add(gNodeID);
+			if ( nodeIDsForString2.contains(connectedNodeID) ) {
+				paths.add(new ArrayList<Integer>(tempPath));
+			}
+			else {
+				findGraphPathRecursive(currentDepth+1, connectedNodeID, nodeIDsForString2, Constants.DEPTH, tempPath, paths, uid, store);
+			}
+			tempPath.remove(gNodeID);
+		}
+	}
 
-		File storageDir = new File("C:\\Users\\Sajal\\git\\DataLakers\\graph");
+	private List<Integer> searchQuery(String uid, String string) {
+		HashSet<Integer> invertedIndex = null;
+		List<Integer> searchResults = new ArrayList<Integer>();
+		List<Integer> initialResults = new ArrayList<Integer>();
+		List<Integer> intermediateResults = null;
+		
+		File storageDir = new File(Constants.DIR_PATH);
 		StorageAPI store = new StorageAPI(storageDir);
 	
 		invertedIndex = store.getInvertedIndex(string);
 		
-		return invertedIndex;
+		initialResults.addAll(invertedIndex);
+		checkPermission(uid,initialResults);
+		
+		searchResults.addAll(initialResults);
+		
+		for (Integer nodeID : initialResults) {
+			intermediateResults=getConnectedNodes(store,nodeID);
+			checkPermission(uid,intermediateResults);
+			
+			if (intermediateResults!=null && intermediateResults.size()!=0) {
+				searchResults.addAll(intermediateResults);
+			}
+		}
+		store.closeDB();
+		return searchResults;
+	}
+
+	private void checkPermission(String uid, List<Integer> results) {
+		//TODO : check permissions
+		
+	}
+
+	private List<Integer> getConnectedNodes(StorageAPI store, Integer nodeID) {
+		List<Integer> connectedNodes = new ArrayList<Integer>();
+		
+		GraphNode node = store.getGraphNode(nodeID);
+		
+		//Parent
+		connectedNodes.add(node.getParent());
+		
+		//Children
+		if (node.getChildren()!=null)
+			connectedNodes.addAll(node.getChildren());
+		
+		//linked nodes
+		//connectedNodes.addAll(store.getLinkedNodes(nodeID))
+		
+		return connectedNodes;
 	}
 }
