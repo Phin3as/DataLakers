@@ -12,6 +12,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 
 import edu.upenn.cis550.extractor.Struct;
+import edu.upenn.cis550.linker.LinkerObject;
 
 /**
  * Main Storage API to access the database
@@ -120,6 +121,40 @@ public class StorageAPI {
 		return da.docByID.get(docID).getDocNodes();
 	}
 	
+	/**
+	 * Update Links in the database
+	 * @param links
+	 */
+	public void updateLinks(List<LinkerObject> links){
+		for(int i=0; i<links.size(); i++){
+			int node1 = links.get(i).getNode1();
+			int node2 = links.get(i).getNode2();
+			putLinkedNode(node1,node2);
+			putLinkedNode(node2,node1);
+		}
+	}
+	
+	/**
+	 * Put Linked Nodes in the database
+	 * @param node1
+	 * @param node2
+	 */
+	public void putLinkedNode(int node1, int node2){
+		LinkedNodes node = da.nodeLinkerByID.get(node1);
+		if(node == null){
+			node = new LinkedNodes(node1);
+		}
+		node.getLinkedNodes().add(node2);
+		da.nodeLinkerByID.put(node);
+	}
+	/**
+	 * Returns a list of linked nodes to the input nodeID
+	 * @param nodeID
+	 * @return
+	 */
+	public List<Integer> getLinkedNodes(int nodeID){
+		return da.nodeLinkerByID.get(nodeID).getLinkedNodes();
+	}
 	/**
 	 * Putting a new document in the database
 	 * @param documentID

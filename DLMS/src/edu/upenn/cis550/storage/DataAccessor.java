@@ -11,7 +11,7 @@ public class DataAccessor {
 	public PrimaryIndex<Integer,ForwardIndex> docByID;
 	public PrimaryIndex<String, User> userByName;
 	public PrimaryIndex<Long, Document> documentByID;
-	
+	public PrimaryIndex<Integer, LinkedNodes> nodeLinkerByID; 
 	/**
 	 * Open the indices
 	 * @param store
@@ -26,5 +26,6 @@ public class DataAccessor {
 		docByID = store.getPrimaryIndex(Integer.class, ForwardIndex.class);
 		userByName = store.getPrimaryIndex(String.class, User.class);
 		documentByID = store.getPrimaryIndex(Long.class, Document.class);
+		nodeLinkerByID = store.getPrimaryIndex(Integer.class, LinkedNodes.class);
 	}
 }
