@@ -4,6 +4,11 @@ public class LinkerObject {
 	Integer node1;
 	Integer node2;
 	
+	public LinkerObject(Integer node1, Integer node2) {
+		this.node1 = node1;
+		this.node2 = node2;
+	}
+	
 	public Integer getNode1() {
 		return node1;
 	}
