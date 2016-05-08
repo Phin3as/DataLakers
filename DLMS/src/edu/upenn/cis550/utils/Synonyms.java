@@ -1,25 +1,29 @@
 package edu.upenn.cis550.utils;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import edu.smu.tspell.wordnet.*; 
 
 public class Synonyms {
 	
-	public static void main(String[] args){ 
+	private WordNetDatabase database = WordNetDatabase.getFileInstance(); 
 	
-		NounSynset nounSynset; 
-		NounSynset[] hyponyms; 
-	
-		WordNetDatabase database = WordNetDatabase.getFileInstance(); 
-		Synset[] synsets = database.getSynsets("fly", SynsetType.NOUN); 
-		System.out.println("Not Woorking");
-		for (int i = 0; i < synsets.length; i++) { 
-		    
-			nounSynset = (NounSynset)(synsets[i]); 
-		    hyponyms = nounSynset.getHyponyms(); 
-		    System.err.println(nounSynset.getWordForms()[0] + 
-		            ": " + nounSynset.getDefinition() + ") has " + hyponyms.length + " hyponyms"); 
+	public HashSet<String> getSynonyms(String word){
 		
+		System.setProperty("wordnet.database.dir", "C:\\Program Files (x86)\\WordNet\\2.1\\dict");
+		HashSet<String> result = new HashSet<String>();
+		Synset[] synsets = database.getSynsets(word); 
+		
+		for(Synset synonym : synsets){
+			for(String foo : synonym.getWordForms()){
+				result.add(foo);
+			}
 		}
-	
+		
+		System.out.println(Arrays.toString(result.toArray()));
+		return result;
 	}
+	
+	
 }
