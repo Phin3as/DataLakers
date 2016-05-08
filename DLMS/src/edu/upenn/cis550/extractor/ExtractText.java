@@ -60,6 +60,9 @@ public class ExtractText {
 		map.put(root.getId(), root);
 		
 		for(int i : map.keySet()){
+			
+			if(!map.get(i).getName().equals("Systems"))
+				continue;
 			System.out.println(i + "------->");
 			System.out.println("\tNode id :"  + map.get(i).getId());
 			System.out.println("\tDoc Id :"  + map.get(i).getDocumentID());
