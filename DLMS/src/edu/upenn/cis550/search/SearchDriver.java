@@ -10,7 +10,7 @@ public class SearchDriver {
 		long startTime = System.currentTimeMillis();
 
 		Search search = new Search();
-		Object ret = search.searchGraph("SAJAL","obliterate mani");
+		Object ret = search.searchGraph("SAJAL","olbiterat mani");
 		if (ret instanceof List<?>) {
 			List<List<String>> paths = (List<List<String>>)ret;
 			

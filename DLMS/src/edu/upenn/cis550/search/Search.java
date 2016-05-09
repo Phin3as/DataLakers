@@ -1,6 +1,9 @@
 package edu.upenn.cis550.search;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -101,6 +104,12 @@ public class Search {
 		string1 = string1.toLowerCase();
 		string2 = string2.toLowerCase();
 		
+		String correctedString1,correctedString2;
+		if (Constants.IS_SPELL_CHECK) {
+			correctedString1 = spellChecker(string1);
+			correctedString2 = spellChecker(string2);
+		}
+		
 		List<List<Integer>> paths = new ArrayList<List<Integer>>();
 
 		GraphNode node = null;
@@ -120,10 +129,18 @@ public class Search {
 		if (Constants.IS_SYNONYM) {
 			synonymsForString1 = getSynonyms(store, string1);
 			synonymsForString2 = getSynonyms(store, string2);
+			if (Constants.IS_SPELL_CHECK) {
+				synonymsForString1.addAll(getSynonyms(store, correctedString1));
+				synonymsForString2.addAll(getSynonyms(store, correctedString2));
+			}
 		}
 		else {
 			synonymsForString1.add(string1);
 			synonymsForString2.add(string2);
+			if (Constants.IS_SPELL_CHECK) {
+				synonymsForString1.add(correctedString1);
+				synonymsForString2.add(correctedString2);
+			}
 		}
 
 		if (Constants.IS_STEM) {
@@ -227,6 +244,10 @@ public class Search {
 	private List<List<Integer>> searchQuery(String uid, String string) {
 		string = string.toLowerCase();
 
+		String correctedString;
+		if (Constants.IS_SPELL_CHECK) {
+			correctedString = spellChecker(string);
+		}
 		List<List<Integer>> output = new ArrayList<List<Integer>>();
 
 		HashSet<Integer> invertedIndex = new HashSet<Integer>();
@@ -241,9 +262,15 @@ public class Search {
 
 		if (Constants.IS_SYNONYM) {
 			synonyms = getSynonyms(store,string);
+			if (Constants.IS_SPELL_CHECK) {
+				synonyms.addAll(getSynonyms(store, correctedString));
+			}
 		}
 		else {
 			synonyms.add(string);
+			if (Constants.IS_SPELL_CHECK) {
+				synonyms.add(correctedString);
+			}
 		}
 		
 		if (Constants.IS_STEM) {
@@ -381,4 +408,30 @@ public class Search {
 		
 		return connectedNodes;
 	}
+	
+	  public String spellChecker(String query){
+		  String spellCheckerDirectory = Constants.PATH_SPELL;
+		  String output = "";
+		  String tokens[] = query.toLowerCase().trim().split("[ ]+");
+		  for(String token : tokens){
+			  try {
+				  ProcessBuilder builder = new ProcessBuilder("python", spellCheckerDirectory, token);
+				  builder.redirectErrorStream(true);
+				  Process process = builder.start();
+				  //Process process = Runtime.getRuntime().exec(spellChecker);
+				  //process.waitFor();
+				  BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				  String line;
+				  while((line=reader.readLine()) != null){
+					  output += line.trim();
+				  }
+				  output += " ";
+			  } catch (IOException e) {
+				  e.printStackTrace();
+				  output = query;
+				  break;
+			  }  
+		  }
+		  return output.trim();
+	  }
 }
