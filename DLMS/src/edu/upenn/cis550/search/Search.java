@@ -13,6 +13,7 @@ import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
 import edu.upenn.cis550.utils.Constants;
 import edu.upenn.cis550.utils.Stemmer;
+import edu.upenn.cis550.utils.Synonyms;
 
 public class Search {
 
@@ -100,6 +101,9 @@ public class Search {
 		
 		//generating list of nodes for string1
 		invertedIndex = store.getInvertedIndex(string1);
+		if (Constants.IS_SYNONYM) {
+			getSynonyms(store,string1,invertedIndex);
+		}
 		nodeIDsForString1.addAll(invertedIndex);
 		checkPermission(store, uid, nodeIDsForString1);
 		for (Integer nodeID : nodeIDsForString1) {
@@ -112,6 +116,9 @@ public class Search {
 		
 		//generating list of nodes for string2
 		invertedIndex = store.getInvertedIndex(string2);
+		if (Constants.IS_SYNONYM) {
+			getSynonyms(store,string2,invertedIndex);
+		}
 		nodeIDsForString2.addAll(invertedIndex);
 		checkPermission(store, uid, nodeIDsForString2);
 		for (Integer nodeID : nodeIDsForString2) {
@@ -172,9 +179,14 @@ public class Search {
 		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
 	
-		invertedIndex = store.getInvertedIndex(string);
 		
+		invertedIndex = store.getInvertedIndex(string);
+
+		if (Constants.IS_SYNONYM) {
+			getSynonyms(store,string,invertedIndex);
+		}
 		initialResults.addAll(invertedIndex);
+
 		checkPermission(store,uid,initialResults);
 		
 		searchResults.addAll(initialResults);
@@ -196,6 +208,18 @@ public class Search {
 		}
 		store.closeDB();
 		return output;
+	}
+
+	private void getSynonyms(StorageAPI store, String string, HashSet<Integer> data) {
+		Synonyms syn = new Synonyms();
+		HashSet<String> synonyms = syn.getSynonyms(string);
+		HashSet<Integer> invertedIndex = null;
+		for (String word : synonyms) {
+			invertedIndex = store.getInvertedIndex(word);
+			if (invertedIndex!=null) {
+				data.addAll(invertedIndex);
+			}
+		}
 	}
 
 	private void printList(StorageAPI store, List<Integer> path) {
@@ -251,10 +275,10 @@ public class Search {
 		boolean status;
 		for (Integer nodeID : results) {
 			node = store.getGraphNode(nodeID);
-//			status = store.checkPermission(uid,node.getDocumentID());
-//			if (!status) {
-//				results.remove(nodeID);
-//			}
+			status = store.checkPermission(node.getDocumentID(),uid);
+			if (!status) {
+				results.remove(nodeID);
+			}
 		}
 	}
 

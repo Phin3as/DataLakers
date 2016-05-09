@@ -23,5 +23,4 @@ public class LinkerDriver {
 		long totalTime = endTime - startTime;
 		System.out.println(totalTime);
 	}
-
 }
