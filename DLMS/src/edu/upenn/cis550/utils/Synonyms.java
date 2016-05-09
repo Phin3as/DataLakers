@@ -21,15 +21,23 @@ public class Synonyms {
 		
 		HashSet<String> result = new HashSet<String>();
 		Synset[] synsets = database.getSynsets(word); 
-		result.add(word);
+		if(isSingleWord(word))
+			result.add(word.toLowerCase());
 		for(Synset synonym : synsets){
 			for(String foo : synonym.getWordForms()){
-				result.add(foo);
+				if(isSingleWord(foo))
+					result.add(foo.toLowerCase());
 			}
 		}
 		
 		System.out.println(Arrays.toString(result.toArray()));
 		return result;
+	}
+	
+	private boolean isSingleWord(String word){
+		
+		return word.split(" ").length < 2;
+		
 	}
 	
 }

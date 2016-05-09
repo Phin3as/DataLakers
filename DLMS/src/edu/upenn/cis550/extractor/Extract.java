@@ -17,12 +17,12 @@ public class Extract extends Thread {
 	public void run(){
 		
 		ExtractFields e = ExtractFields.getInstance();
-		StorageAPI store = new StorageAPI(new File("E:/graph7"));
-		e.setDataBase(store);
+		StorageAPI store = new StorageAPI(new File("E:/graph10"));
+//		e.setDataBase(store);
 		
 		final File folder = new File("E:/sampleFiles");
 		try {
-			getFiles(folder, e);
+			getFiles(folder, e, store);
 		} catch (IOException | SAXException | TikaException | ParserConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -42,16 +42,18 @@ public class Extract extends Thread {
 		
 	}
 	
-	public static void getFiles(final File folder, ExtractFields e) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException {
-	    int i = 0;
-		for (final File fileEntry : folder.listFiles()) {
-	        if (fileEntry.isDirectory()) {
-	            getFiles(fileEntry, e);
-	        } else {
-	        	System.out.println("Reading file : " + fileEntry.getName());
-	            e.extract(fileEntry, i);
-	        }
-	        i = i + 1;
+	public static void getFiles(final File folder, ExtractFields e, StorageAPI store) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException {
+	    if (folder.listFiles() == null){
+	    	e.extract(folder, store);
+	    } else {
+			for (final File fileEntry : folder.listFiles()) {
+		        if (fileEntry.isDirectory()) {
+		            getFiles(fileEntry, e, store);
+		        } else {
+		        	System.out.println("Reading file : " + fileEntry.getName());
+		            e.extract(fileEntry, store);
+		        }
+		    }
 	    }
 	}
 }
