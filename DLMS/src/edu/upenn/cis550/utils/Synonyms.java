@@ -13,7 +13,7 @@ public class Synonyms {
 		
 		
 		try {
-		System.setProperty("wordnet.database.dir", "C:\\Program Files (x86)\\WordNet\\2.1\\dict");
+		System.setProperty("wordnet.database.dir", Constants.PATH_DICT);
 		} catch (Exception e){
 			return null;
 		}
