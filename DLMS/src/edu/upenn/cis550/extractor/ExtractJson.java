@@ -83,7 +83,7 @@ public class ExtractJson {
 
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode[] valset = mapper.readValue(json.toString(), JsonNode[].class);
-			int i = 0;
+			
 			ArrayList<Integer> children = new ArrayList<Integer>();
 			for(JsonNode val : valset){
 
@@ -91,12 +91,11 @@ public class ExtractJson {
 						 			 	 docId, 
 						 			 	 val.toString(),
 						 			 	 val.getNodeType().toString(), 
-						 			 	 Integer.toString(i),
+						 			 	 null,
 						 			 	 parentId,
 						 			 	 null);
 				node.setChildren(extractJsonNode(val, node.getId(), docId));
 				children.add(node.getId());
-		    	i = i + 1;
 		    	store.putGraphNode(node);
 		    	nodes.add(node.getId());
 		    	map.put(node.getId(), node);
@@ -125,13 +124,14 @@ public class ExtractJson {
 		ArrayList<Integer> children = new ArrayList<Integer>();
 		Iterator<Map.Entry<String,JsonNode>> fieldsIterator = root.fields();
 	    while (fieldsIterator.hasNext()) {
-	    	
 	    	Map.Entry<String,JsonNode> field = fieldsIterator.next();
+	    	String string = field.getValue().toString();
+	    	string = string.replaceAll("^\"|\"$", "");
 	    	Struct node = new Struct(ExtractFields.generateId(), 
 	    						 	 docId, 
 	    						 	 field.getKey(),
 	    						 	 field.getValue().getNodeType().toString(), 
-	    						 	 field.getValue().toString(),
+	    						 	 string,
 	    						 	 parentId,
 	    						 	 null);
 	    	

@@ -17,10 +17,10 @@ public class Extract extends Thread {
 	public void run(){
 		
 		ExtractFields e = ExtractFields.getInstance();
-		StorageAPI store = new StorageAPI(new File("E:/graph"));
+		StorageAPI store = new StorageAPI(new File("E:/graph4"));
 		e.setDataBase(store);
 		
-		final File folder = new File("E:/SampleResume");
+		final File folder = new File("E:/sampleFiles");
 		try {
 			getFiles(folder, e);
 		} catch (IOException | SAXException | TikaException | ParserConfigurationException e1) {
