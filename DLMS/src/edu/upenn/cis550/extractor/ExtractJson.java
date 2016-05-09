@@ -80,7 +80,7 @@ public class ExtractJson {
 	private ArrayList<Integer> extractJsonNode(JsonNode json, int parentId, int docId) throws JsonProcessingException, IOException{
 		
 		if(json.isArray()){
-
+			
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode[] valset = mapper.readValue(json.toString(), JsonNode[].class);
 			
@@ -128,8 +128,14 @@ public class ExtractJson {
 		Iterator<Map.Entry<String,JsonNode>> fieldsIterator = root.fields();
 	    while (fieldsIterator.hasNext()) {
 	    	Map.Entry<String,JsonNode> field = fieldsIterator.next();
+	    		    	
 	    	String stringValue = field.getValue().toString();
-	    	stringValue = stringValue.replaceAll("^\"|\"$", "");
+	    	if(field.getValue().isArray()){
+	    		stringValue = null;
+	    	} else {
+	    		stringValue = stringValue.replaceAll("^\"|\"$", "");
+	    	}
+	    	
 	    	String stringName = field.getKey();
 	    	stringName = stringName.replaceAll("^\"|\"$", "");
 	    	Struct node = new Struct(ExtractFields.generateId(), 

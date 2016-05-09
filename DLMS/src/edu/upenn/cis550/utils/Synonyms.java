@@ -25,5 +25,4 @@ public class Synonyms {
 		return result;
 	}
 	
-	
 }
