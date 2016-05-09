@@ -3,6 +3,7 @@ package edu.upenn.cis550.search;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -15,7 +16,7 @@ import edu.upenn.cis550.utils.Constants;
 public class Search {
 
 	Object searchGraph(String uid, String query) {
-		Object ret_value=null;
+		List<List<Integer>> ret_value=null;
 		
 		String[] queryKeys = query.split(" ");
 		if (queryKeys.length == 1) {
@@ -23,7 +24,13 @@ public class Search {
 		}
 		else if (queryKeys.length == 2) {
 			ret_value = searchQuery(uid, queryKeys[0], queryKeys[1]);
-			
+			Collections.sort(ret_value, new Comparator<List<Integer>>() {
+
+				@Override
+				public int compare(List<Integer> o1, List<Integer> o2) {
+					return o1.size()-o2.size();
+				}
+			});
 		}
 		else {
 			System.out.println("Query length out of bounds : " + queryKeys.length);
