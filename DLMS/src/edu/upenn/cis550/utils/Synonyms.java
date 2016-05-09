@@ -11,7 +11,14 @@ public class Synonyms {
 	
 	public HashSet<String> getSynonyms(String word){
 		
+		
+		try {
 		System.setProperty("wordnet.database.dir", "C:\\Program Files (x86)\\WordNet\\2.1\\dict");
+		} catch (Exception e){
+			return null;
+		}
+		
+		
 		HashSet<String> result = new HashSet<String>();
 		Synset[] synsets = database.getSynsets(word); 
 		
