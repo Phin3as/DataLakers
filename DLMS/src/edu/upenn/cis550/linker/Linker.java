@@ -15,11 +15,9 @@ public class Linker {
 	
 	static final int THREAPOOL_SIZE=20;
 	
-	boolean linker(Integer docID) {
+	boolean linker(StorageAPI store,Integer docID) {
 		System.out.println("Linker.linker():BEGIN:");
 
-		File storageDir = new File(Constants.PATH_DIR);
-		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
 		List<LinkerObject> links = new ArrayList<LinkerObject>();
 		
@@ -53,7 +51,6 @@ public class Linker {
 		}
 		store.updateLinks(links);
 		
-		store.closeDB();
 		System.out.println("Linker.linker()::END");
 		return true;
 	}
