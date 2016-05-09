@@ -26,7 +26,7 @@ import edu.upenn.cis550.storage.StorageAPI;
 public class ExtractFields {
 	
 	private static ExtractFields instance = new ExtractFields( );
-	private static int id = 0; // this is for node id, change it to sensible name
+	private static int id; // this is for node id, change it to sensible name
 	private int documentID;
 	private File file;
 	private StorageAPI store;
@@ -76,9 +76,12 @@ public class ExtractFields {
 		return "NA";
 	}
 	
-	public void extract(File f, int dID) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException{
+	public void extract(File f, StorageAPI store) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException{
 		this.file = f;
-		this.documentID = dID;
+		this.store = store;
+//		this.documentID = dID;
+		this.documentID = store.getLastDocID() + 1;
+		this.id = store.getLastNodeID();
 		
 		String ext = extension();
 		if(ext.equals("json")){
@@ -101,6 +104,9 @@ public class ExtractFields {
 			
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");
 		}
+		
+		store.putLastDocID(documentID);
+		store.putLastNodeID(id);
 	}
 	
 	public static int generateId(){
