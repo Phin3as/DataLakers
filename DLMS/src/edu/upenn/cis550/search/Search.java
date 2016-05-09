@@ -3,9 +3,11 @@ package edu.upenn.cis550.search;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
@@ -15,7 +17,7 @@ import edu.upenn.cis550.utils.Constants;
 public class Search {
 
 	Object searchGraph(String uid, String query) {
-		Object ret_value=null;
+		List<List<Integer>> ret_value=null;
 		
 		String[] queryKeys = query.split(" ");
 		if (queryKeys.length == 1) {
@@ -23,12 +25,57 @@ public class Search {
 		}
 		else if (queryKeys.length == 2) {
 			ret_value = searchQuery(uid, queryKeys[0], queryKeys[1]);
-			
+			Collections.sort(ret_value, new Comparator<List<Integer>>() {
+
+				@Override
+				public int compare(List<Integer> o1, List<Integer> o2) {
+					return o1.size()-o2.size();
+				}
+			});
 		}
 		else {
 			System.out.println("Query length out of bounds : " + queryKeys.length);
 		}
+		checkForDuplicates(ret_value);
 		return ret_value;
+	}
+
+	private void checkForDuplicates(List<List<Integer>> ret_value) {
+		if (ret_value==null)
+			return;
+		boolean status;
+		Set<Integer> pathsToRemove = new LinkedHashSet<Integer>();
+		for (int i=0 ; i<ret_value.size(); i++) {
+			for (int j=i ; j<ret_value.size(); j++) {
+				if (i==j || pathsToRemove.contains(j)) {
+					continue;
+				}
+				status = compareLists(ret_value.get(i),ret_value.get(j));
+				if (status==true) {
+					pathsToRemove.add(j);
+				}
+			}
+		}
+		
+		List<Integer> pathsToRemoveList = new ArrayList<Integer>(pathsToRemove);
+		Collections.sort(pathsToRemoveList);
+		Collections.reverse(pathsToRemoveList);
+		
+		for (int index : pathsToRemoveList) {
+			ret_value.remove(index);
+		}
+		
+	}
+
+	private boolean compareLists(List<Integer> list, List<Integer> list2) {
+		if (list.size()!=list2.size())
+			return false;
+		for (int i = 0; i<list.size();i++) {
+			if (list.get(i)!=list2.get(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private List<List<Integer>> searchQuery(String uid, String string1, String string2) {
@@ -47,7 +94,7 @@ public class Search {
 		//generating list of nodes for string1
 		invertedIndex = store.getInvertedIndex(string1);
 		nodeIDsForString1.addAll(invertedIndex);
-		checkPermission(uid, nodeIDsForString1);
+		checkPermission(store, uid, nodeIDsForString1);
 		for (Integer nodeID : nodeIDsForString1) {
 			node = store.getGraphNode(nodeID);
 			if (node!=null) {
@@ -59,7 +106,7 @@ public class Search {
 		//generating list of nodes for string2
 		invertedIndex = store.getInvertedIndex(string2);
 		nodeIDsForString2.addAll(invertedIndex);
-		checkPermission(uid, nodeIDsForString2);
+		checkPermission(store, uid, nodeIDsForString2);
 		for (Integer nodeID : nodeIDsForString2) {
 			node = store.getGraphNode(nodeID);
 			if (node!=null) {
@@ -81,20 +128,23 @@ public class Search {
 	}
 
 	private void findGraphPathRecursive(int currentDepth, Integer gNodeID, List<Integer> nodeIDsForString2, int depth, List<Integer> tempPath, List<List<Integer>> paths, String uid, StorageAPI store) {
-		if (currentDepth>depth)
+		if (currentDepth>=depth)
 			return;
 		List<Integer> connectedNodes = new ArrayList<Integer>();
 		connectedNodes = getConnectedNodes(store, gNodeID);
-		checkPermission(uid, connectedNodes);
+		checkPermission(store, uid, connectedNodes);
 		for (Integer connectedNodeID : connectedNodes) {
-			tempPath.add(gNodeID);
+			if (tempPath.contains(connectedNodeID)) {
+				continue;
+			}
+			tempPath.add(connectedNodeID);
 			if ( nodeIDsForString2.contains(connectedNodeID) ) {
 				paths.add(new ArrayList<Integer>(tempPath));
 			}
 			else {
 				findGraphPathRecursive(currentDepth+1, connectedNodeID, nodeIDsForString2, Constants.DEPTH, tempPath, paths, uid, store);
 			}
-			tempPath.remove(gNodeID);
+			tempPath.remove(tempPath.size()-1);
 		}
 	}
 
@@ -112,13 +162,13 @@ public class Search {
 		invertedIndex = store.getInvertedIndex(string);
 		
 		initialResults.addAll(invertedIndex);
-		checkPermission(uid,initialResults);
+		checkPermission(store,uid,initialResults);
 		
 		searchResults.addAll(initialResults);
 		
 		for (Integer nodeID : initialResults) {
 			intermediateResults=getConnectedNodes(store,nodeID);
-			checkPermission(uid,intermediateResults);
+			checkPermission(store,uid,intermediateResults);
 			
 			if (intermediateResults!=null && intermediateResults.size()!=0) {
 				searchResults.addAll(intermediateResults);
@@ -183,8 +233,16 @@ public class Search {
 		return false;
 	}
 
-	private void checkPermission(String uid, List<Integer> results) {
-		//TODO : check permissions 
+	private void checkPermission(StorageAPI store, String uid, List<Integer> results) {
+		GraphNode node;
+		boolean status;
+		for (Integer nodeID : results) {
+			node = store.getGraphNode(nodeID);
+			//status = store.checkPermission(uid,node.getDocumentID());
+			//if (!status) {
+				//results.remove(nodeID);
+			//}
+		}
 	}
 
 	private List<Integer> getConnectedNodes(StorageAPI store, Integer nodeID) {
@@ -193,14 +251,16 @@ public class Search {
 		GraphNode node = store.getGraphNode(nodeID);
 		
 		//Parent
-		connectedNodes.add(node.getParent());
+		if (node.getParent()!=-1)
+			connectedNodes.add(node.getParent());
 		
 		//Children
 		if (node.getChildren()!=null)
 			connectedNodes.addAll(node.getChildren());
 		
 		//linked nodes
-		//connectedNodes.addAll(store.getLinkedNodes(nodeID))
+		if (store.getLinkedNodes(nodeID)!=null)
+			connectedNodes.addAll(store.getLinkedNodes(nodeID));
 		
 		return connectedNodes;
 	}

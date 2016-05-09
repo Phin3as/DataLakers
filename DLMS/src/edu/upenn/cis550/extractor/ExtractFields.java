@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import edu.upenn.cis550.linker.Linker;
 import edu.upenn.cis550.storage.StorageAPI;
 
 /**
@@ -25,7 +26,6 @@ import edu.upenn.cis550.storage.StorageAPI;
 public class ExtractFields {
 	
 	private static ExtractFields instance = new ExtractFields( );
-	
 	private static int id = 0; // this is for node id, change it to sensible name
 	private int documentID;
 	private File file;
@@ -36,6 +36,9 @@ public class ExtractFields {
 	private ExtractText text = new ExtractText();
 	private ExtractXml xml = new ExtractXml();
 	private ExtractCsv csv = new ExtractCsv();
+	
+	//Linker Objects
+	private Linker link = new Linker();
 	
 	private ExtractFields(){ }
 	   
@@ -81,15 +84,19 @@ public class ExtractFields {
 		if(ext.equals("json")){
 			ArrayList<Integer> nodes = json.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
+			link.linker(store, documentID);
 		} else if(ext.equals("plain") || ext.equals("pdf")){
 			ArrayList<Integer> nodes = text.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
+			link.linker(store, documentID);
 		} else if(ext.equals("xml") || ext.equals("html")){
 			ArrayList<Integer> nodes = xml.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
+			link.linker(store, documentID);
 		} else if(ext.equals("csv")){
 			ArrayList<Integer> nodes = csv.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
+			link.linker(store, documentID);
 		} else {
 			
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");
