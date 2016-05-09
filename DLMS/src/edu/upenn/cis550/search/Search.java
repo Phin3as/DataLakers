@@ -47,7 +47,7 @@ public class Search {
 		//generating list of nodes for string1
 		invertedIndex = store.getInvertedIndex(string1);
 		nodeIDsForString1.addAll(invertedIndex);
-		checkPermission(uid, nodeIDsForString1);
+		checkPermission(store, uid, nodeIDsForString1);
 		for (Integer nodeID : nodeIDsForString1) {
 			node = store.getGraphNode(nodeID);
 			if (node!=null) {
@@ -59,7 +59,7 @@ public class Search {
 		//generating list of nodes for string2
 		invertedIndex = store.getInvertedIndex(string2);
 		nodeIDsForString2.addAll(invertedIndex);
-		checkPermission(uid, nodeIDsForString2);
+		checkPermission(store, uid, nodeIDsForString2);
 		for (Integer nodeID : nodeIDsForString2) {
 			node = store.getGraphNode(nodeID);
 			if (node!=null) {
@@ -81,20 +81,20 @@ public class Search {
 	}
 
 	private void findGraphPathRecursive(int currentDepth, Integer gNodeID, List<Integer> nodeIDsForString2, int depth, List<Integer> tempPath, List<List<Integer>> paths, String uid, StorageAPI store) {
-		if (currentDepth>depth)
+		if (currentDepth>=depth)
 			return;
 		List<Integer> connectedNodes = new ArrayList<Integer>();
 		connectedNodes = getConnectedNodes(store, gNodeID);
-		checkPermission(uid, connectedNodes);
+		checkPermission(store, uid, connectedNodes);
 		for (Integer connectedNodeID : connectedNodes) {
-			tempPath.add(gNodeID);
+			tempPath.add(connectedNodeID);
 			if ( nodeIDsForString2.contains(connectedNodeID) ) {
 				paths.add(new ArrayList<Integer>(tempPath));
 			}
 			else {
 				findGraphPathRecursive(currentDepth+1, connectedNodeID, nodeIDsForString2, Constants.DEPTH, tempPath, paths, uid, store);
 			}
-			tempPath.remove(gNodeID);
+			tempPath.remove(tempPath.size()-1);
 		}
 	}
 
@@ -112,13 +112,13 @@ public class Search {
 		invertedIndex = store.getInvertedIndex(string);
 		
 		initialResults.addAll(invertedIndex);
-		checkPermission(uid,initialResults);
+		checkPermission(store,uid,initialResults);
 		
 		searchResults.addAll(initialResults);
 		
 		for (Integer nodeID : initialResults) {
 			intermediateResults=getConnectedNodes(store,nodeID);
-			checkPermission(uid,intermediateResults);
+			checkPermission(store,uid,intermediateResults);
 			
 			if (intermediateResults!=null && intermediateResults.size()!=0) {
 				searchResults.addAll(intermediateResults);
@@ -183,8 +183,16 @@ public class Search {
 		return false;
 	}
 
-	private void checkPermission(String uid, List<Integer> results) {
-		//TODO : check permissions 
+	private void checkPermission(StorageAPI store, String uid, List<Integer> results) {
+		GraphNode node;
+		boolean status;
+		for (Integer nodeID : results) {
+			node = store.getGraphNode(nodeID);
+			//status = store.checkPermission(uid,node.getDocumentID());
+			//if (!status) {
+				//results.remove(nodeID);
+			//}
+		}
 	}
 
 	private List<Integer> getConnectedNodes(StorageAPI store, Integer nodeID) {
@@ -193,14 +201,16 @@ public class Search {
 		GraphNode node = store.getGraphNode(nodeID);
 		
 		//Parent
-		connectedNodes.add(node.getParent());
+		if (node.getParent()!=-1)
+			connectedNodes.add(node.getParent());
 		
 		//Children
 		if (node.getChildren()!=null)
 			connectedNodes.addAll(node.getChildren());
 		
 		//linked nodes
-		//connectedNodes.addAll(store.getLinkedNodes(nodeID))
+		if (store.getLinkedNodes(nodeID)!=null)
+			connectedNodes.addAll(store.getLinkedNodes(nodeID));
 		
 		return connectedNodes;
 	}

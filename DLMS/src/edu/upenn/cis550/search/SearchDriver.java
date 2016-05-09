@@ -1,6 +1,5 @@
 package edu.upenn.cis550.search;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchDriver {
@@ -9,7 +8,7 @@ public class SearchDriver {
 		System.out.println("SearchDriver.main()::BEGIN");
 		
 		Search search = new Search();
-		Object ret = search.searchGraph("","Systems");
+		Object ret = search.searchGraph("","gupta mahesh");
 		if (ret instanceof List<?>) {
 			List<List<Integer>> paths = (List<List<Integer>>)ret;
 			

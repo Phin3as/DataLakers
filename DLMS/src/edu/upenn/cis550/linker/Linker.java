@@ -1,6 +1,7 @@
 package edu.upenn.cis550.linker;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -20,6 +21,7 @@ public class Linker {
 		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
+		List<LinkerObject> links = new ArrayList<LinkerObject>();
 		
 		//do stemming/synonyms
 		GraphNode node=null;
@@ -44,9 +46,13 @@ public class Linker {
 			
 			linkedNodes.removeAll(docNodes);
 			printNodes(store,node,linkedNodes);
+			
+			for (Integer linkedNode : linkedNodes) {
+				links.add(new LinkerObject(nodeID,linkedNode));
+			}
 		}
-		//check for filename comparison
-		//update dbs
+		store.updateLinks(links);
+		
 		store.closeDB();
 		System.out.println("Linker.linker()::END");
 		return true;

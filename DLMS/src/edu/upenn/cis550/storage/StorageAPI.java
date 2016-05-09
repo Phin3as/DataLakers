@@ -153,6 +153,8 @@ public class StorageAPI {
 	 * @return
 	 */
 	public List<Integer> getLinkedNodes(int nodeID){
+		if (da.nodeLinkerByID.get(nodeID)==null)
+			return null;
 		return da.nodeLinkerByID.get(nodeID).getLinkedNodes();
 	}
 	/**
