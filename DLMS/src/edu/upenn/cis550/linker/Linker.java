@@ -15,7 +15,7 @@ public class Linker {
 	
 	static final int THREAPOOL_SIZE=20;
 	
-	boolean linker(StorageAPI store,Integer docID) {
+	public boolean linker(StorageAPI store,Integer docID) {
 		System.out.println("Linker.linker():BEGIN:");
 
 		List<Integer> docNodes = store.getDocNodes(docID);
@@ -55,7 +55,7 @@ public class Linker {
 		return true;
 	}
 
-	boolean threadedLinker(Integer docID) {
+	public boolean threadedLinker(Integer docID) {
 		System.out.println("Linker.threadedLinker()::BEGIN");
 		
 		ExecutorService executor = Executors.newFixedThreadPool(THREAPOOL_SIZE);

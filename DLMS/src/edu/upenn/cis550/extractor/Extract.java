@@ -17,7 +17,7 @@ public class Extract extends Thread {
 	public void run(){
 		
 		ExtractFields e = ExtractFields.getInstance();
-		StorageAPI store = new StorageAPI(new File("E:/graph6"));
+		StorageAPI store = new StorageAPI(new File("E:/graph7"));
 		e.setDataBase(store);
 		
 		final File folder = new File("E:/sampleFiles");
