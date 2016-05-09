@@ -8,7 +8,7 @@ public class SearchDriver {
 		System.out.println("SearchDriver.main()::BEGIN");
 		
 		Search search = new Search();
-		Object ret = search.searchGraph("","gupta mahesh");
+		Object ret = search.searchGraph("","killing mani");
 		if (ret instanceof List<?>) {
 			List<List<Integer>> paths = (List<List<Integer>>)ret;
 			

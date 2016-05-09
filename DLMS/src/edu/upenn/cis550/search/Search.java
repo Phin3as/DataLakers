@@ -82,29 +82,62 @@ public class Search {
 	private List<List<Integer>> searchQuery(String uid, String string1, String string2) {
 		string1 = string1.toLowerCase();
 		string2 = string2.toLowerCase();
-		if (Constants.IS_STEM) {
-			Stemmer st = new Stemmer();
-			string1 = st.stemWord(string1);
-			string2 = st.stemWord(string2);
-		}
-		List<List<Integer>> paths = new ArrayList<List<Integer>>();
 		
+		List<List<Integer>> paths = new ArrayList<List<Integer>>();
+
 		GraphNode node = null;
-		HashSet<Integer> invertedIndex = null;
+		HashSet<Integer> invertedIndex = new HashSet<Integer>();
 		List<GraphNode> nodesForString1 = new ArrayList<GraphNode>();
 		List<GraphNode> nodesForString2 = new ArrayList<GraphNode>();
 		List<Integer> nodeIDsForString1 = new ArrayList<Integer>();
 		List<Integer> nodeIDsForString2 = new ArrayList<Integer>();
-		
+		HashSet<String> synonymsForString1 = new HashSet<String>();
+		HashSet<String> synonymsForString2 = new HashSet<String>();
+		HashSet<String> stemmedSynonymsForString1 = new HashSet<String>();
+		HashSet<String> stemmedSynonymsForString2 = new HashSet<String>();
+
 		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
-		
-		//generating list of nodes for string1
-		invertedIndex = store.getInvertedIndex(string1);
+
 		if (Constants.IS_SYNONYM) {
-			getSynonyms(store,string1,invertedIndex);
+			synonymsForString1 = getSynonyms(store, string1);
+			synonymsForString2 = getSynonyms(store, string2);
 		}
-		nodeIDsForString1.addAll(invertedIndex);
+		else {
+			synonymsForString1.add(string1);
+			synonymsForString2.add(string2);
+		}
+
+		if (Constants.IS_STEM) {
+			Stemmer st = new Stemmer();
+			String stemmedWord;
+			for (String word : synonymsForString1) {
+				stemmedWord = st.stemWord(word);
+				stemmedSynonymsForString1.add(stemmedWord);
+			}
+			for (String word : synonymsForString2) {
+				stemmedWord = st.stemWord(word);
+				stemmedSynonymsForString2.add(stemmedWord);
+			}
+		}
+
+		//generating list of nodes for string1
+		if (Constants.IS_STEM) {
+			for (String word : stemmedSynonymsForString1) {
+				if (store.getStemmedInvertedIndex(word)!=null) {
+					invertedIndex.addAll(store.getStemmedInvertedIndex(word));
+				}
+			}
+		} else {
+			for (String word : synonymsForString1) {
+				if (store.getInvertedIndex(word)!=null) {
+					invertedIndex.addAll(store.getInvertedIndex(string1));
+				}
+			}
+		}
+
+		if (invertedIndex!=null)
+			nodeIDsForString1.addAll(invertedIndex);
 		checkPermission(store, uid, nodeIDsForString1);
 		for (Integer nodeID : nodeIDsForString1) {
 			node = store.getGraphNode(nodeID);
@@ -114,12 +147,23 @@ public class Search {
 		}
 		System.out.println("String : "+string1+"\nNodes : "+nodeIDsForString1.size());
 		
+		invertedIndex = new HashSet<Integer>();
 		//generating list of nodes for string2
-		invertedIndex = store.getInvertedIndex(string2);
-		if (Constants.IS_SYNONYM) {
-			getSynonyms(store,string2,invertedIndex);
+		if (Constants.IS_STEM) {
+			for (String word : stemmedSynonymsForString2) {
+				if (store.getStemmedInvertedIndex(word)!=null) {
+					invertedIndex.addAll(store.getStemmedInvertedIndex(word));
+				}
+			}
+		} else {
+			for (String word : synonymsForString2) {
+				if (store.getInvertedIndex(word)!=null) {
+					invertedIndex.addAll(store.getInvertedIndex(word));
+				}
+			}
 		}
-		nodeIDsForString2.addAll(invertedIndex);
+		if (invertedIndex!=null)
+			nodeIDsForString2.addAll(invertedIndex);
 		checkPermission(store, uid, nodeIDsForString2);
 		for (Integer nodeID : nodeIDsForString2) {
 			node = store.getGraphNode(nodeID);
@@ -164,26 +208,48 @@ public class Search {
 
 	private List<List<Integer>> searchQuery(String uid, String string) {
 		string = string.toLowerCase();
-		if (Constants.IS_STEM) {
-			Stemmer st = new Stemmer();
-			string = st.stemWord(string);
-		}
-		
+
 		List<List<Integer>> output = new ArrayList<List<Integer>>();
-		
-		HashSet<Integer> invertedIndex = null;
+
+		HashSet<Integer> invertedIndex = new HashSet<Integer>();
 		List<Integer> searchResults = new ArrayList<Integer>();
 		List<Integer> initialResults = new ArrayList<Integer>();
 		List<Integer> intermediateResults = null;
-		
+		HashSet<String> synonyms = new HashSet<String>();
+		HashSet<String> stemmedSynonyms = new HashSet<String>();
+
 		File storageDir = new File(Constants.PATH_DIR);
 		StorageAPI store = new StorageAPI(storageDir);
-	
-		
-		invertedIndex = store.getInvertedIndex(string);
 
 		if (Constants.IS_SYNONYM) {
-			getSynonyms(store,string,invertedIndex);
+			synonyms = getSynonyms(store,string);
+		}
+		else {
+			synonyms.add(string);
+		}
+		
+		if (Constants.IS_STEM) {
+			Stemmer st = new Stemmer();
+			String stemmedWord;
+			for (String word : synonyms) {
+				stemmedWord = st.stemWord(word);
+				stemmedSynonyms.add(stemmedWord);
+			}
+		}
+
+		if (Constants.IS_STEM) {
+			for (String stemmedWord : stemmedSynonyms) {
+				if (store.getStemmedInvertedIndex(stemmedWord)!=null) {
+					invertedIndex.addAll(store.getStemmedInvertedIndex(stemmedWord));
+				}
+			}
+		}
+		else {
+			for (String word : synonyms) {
+				if (store.getInvertedIndex(word)!=null) {
+					invertedIndex.addAll(store.getInvertedIndex(word));
+				}
+			}
 		}
 		initialResults.addAll(invertedIndex);
 
@@ -210,16 +276,10 @@ public class Search {
 		return output;
 	}
 
-	private void getSynonyms(StorageAPI store, String string, HashSet<Integer> data) {
+	private HashSet<String> getSynonyms(StorageAPI store, String string) {
 		Synonyms syn = new Synonyms();
 		HashSet<String> synonyms = syn.getSynonyms(string);
-		HashSet<Integer> invertedIndex = null;
-		for (String word : synonyms) {
-			invertedIndex = store.getInvertedIndex(word);
-			if (invertedIndex!=null) {
-				data.addAll(invertedIndex);
-			}
-		}
+		return synonyms;
 	}
 
 	private void printList(StorageAPI store, List<Integer> path) {
@@ -271,15 +331,15 @@ public class Search {
 	}
 
 	private void checkPermission(StorageAPI store, String uid, List<Integer> results) {
-		GraphNode node;
-		boolean status;
-		for (Integer nodeID : results) {
-			node = store.getGraphNode(nodeID);
-			status = store.checkPermission(node.getDocumentID(),uid);
-			if (!status) {
-				results.remove(nodeID);
-			}
-		}
+//		GraphNode node;
+//		boolean status;
+//		for (Integer nodeID : results) {
+//			node = store.getGraphNode(nodeID);
+//			status = store.checkPermission(node.getDocumentID(),uid);
+//			if (!status) {
+//				results.remove(nodeID);
+//			}
+//		}
 	}
 
 	private List<Integer> getConnectedNodes(StorageAPI store, Integer nodeID) {
