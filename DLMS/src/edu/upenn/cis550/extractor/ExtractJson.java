@@ -86,10 +86,13 @@ public class ExtractJson {
 			
 			ArrayList<Integer> children = new ArrayList<Integer>();
 			for(JsonNode val : valset){
-
+				
+				String stringName = val.toString();
+		    	stringName = stringName.replaceAll("^\"|\"$", "");
+		    	
 				Struct node = new Struct(ExtractFields.generateId(), 
 						 			 	 docId, 
-						 			 	 val.toString(),
+						 			 	 stringName,
 						 			 	 val.getNodeType().toString(), 
 						 			 	 null,
 						 			 	 parentId,
@@ -125,13 +128,15 @@ public class ExtractJson {
 		Iterator<Map.Entry<String,JsonNode>> fieldsIterator = root.fields();
 	    while (fieldsIterator.hasNext()) {
 	    	Map.Entry<String,JsonNode> field = fieldsIterator.next();
-	    	String string = field.getValue().toString();
-	    	string = string.replaceAll("^\"|\"$", "");
+	    	String stringValue = field.getValue().toString();
+	    	stringValue = stringValue.replaceAll("^\"|\"$", "");
+	    	String stringName = field.getKey();
+	    	stringName = stringName.replaceAll("^\"|\"$", "");
 	    	Struct node = new Struct(ExtractFields.generateId(), 
 	    						 	 docId, 
-	    						 	 field.getKey(),
+	    						 	 stringName,
 	    						 	 field.getValue().getNodeType().toString(), 
-	    						 	 string,
+	    						 	 stringValue,
 	    						 	 parentId,
 	    						 	 null);
 	    	
