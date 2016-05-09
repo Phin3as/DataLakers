@@ -17,7 +17,8 @@ import edu.upenn.cis550.utils.Synonyms;
 
 public class Search {
 
-	public List<List<Integer>> searchGraph(String uid, String query) {
+	public List<List<String>> searchGraph(String uid, String query) {
+		List<List<String>> finalOutput = new ArrayList<List<String>>();
 		List<List<Integer>> ret_value=null;
 		
 		String[] queryKeys = query.split(" ");
@@ -38,7 +39,24 @@ public class Search {
 			System.out.println("Query length out of bounds : " + queryKeys.length);
 		}
 		checkForDuplicates(ret_value);
-		return ret_value;
+		
+		File storageDir = new File(Constants.PATH_DIR);
+		StorageAPI store = new StorageAPI(storageDir);
+
+		List<String> singleOp;
+		GraphNode node;
+		for (List<Integer> list : ret_value) {
+			singleOp = new ArrayList<String>();
+			for (Integer nodeID : list) {
+				node = store.getGraphNode(nodeID);
+				singleOp.add(node.getName()+","+node.getValue()+","+node.getType());
+			}
+			finalOutput.add(singleOp);
+		}
+
+		store.closeDB();
+				
+		return finalOutput;
 	}
 
 	private void checkForDuplicates(List<List<Integer>> ret_value) {
