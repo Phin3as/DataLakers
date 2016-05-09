@@ -70,6 +70,27 @@ public class StorageAPI {
 		return lastDocID;
 	}
 	
+	public void putLastNodeID(int nodeID){
+		DataLog log = da.dataLogByValue.get(logKey);
+		if(log == null){
+			log = new DataLog(logKey,nodeID,0);
+		}else{
+			int docID = log.getLastDocID();
+			log = new DataLog(logKey,nodeID,docID);
+		}
+		da.dataLogByValue.put(log);
+	}
+	
+	public void putLastDocID(int docID){
+		DataLog log = da.dataLogByValue.get(logKey);
+		if(log == null){
+			log = new DataLog(logKey,0,docID);
+		}else{
+			int nodeID = log.getLastDocID();
+			log = new DataLog(logKey,nodeID,docID);
+		}
+		da.dataLogByValue.put(log);
+	}
 	
 	/**
 	 * Put graphNode in the database
