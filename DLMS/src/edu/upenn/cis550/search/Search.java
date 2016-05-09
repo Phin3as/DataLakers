@@ -12,7 +12,7 @@ import java.util.Set;
 import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
 import edu.upenn.cis550.utils.Constants;
-
+import edu.upenn.cis550.utils.Stemmer;
 
 public class Search {
 
@@ -79,6 +79,13 @@ public class Search {
 	}
 
 	private List<List<Integer>> searchQuery(String uid, String string1, String string2) {
+		string1 = string1.toLowerCase();
+		string2 = string2.toLowerCase();
+		if (Constants.IS_STEM) {
+			Stemmer st = new Stemmer();
+			string1 = st.stemWord(string1);
+			string2 = st.stemWord(string2);
+		}
 		List<List<Integer>> paths = new ArrayList<List<Integer>>();
 		
 		GraphNode node = null;
@@ -149,6 +156,12 @@ public class Search {
 	}
 
 	private List<List<Integer>> searchQuery(String uid, String string) {
+		string = string.toLowerCase();
+		if (Constants.IS_STEM) {
+			Stemmer st = new Stemmer();
+			string = st.stemWord(string);
+		}
+		
 		List<List<Integer>> output = new ArrayList<List<Integer>>();
 		
 		HashSet<Integer> invertedIndex = null;
@@ -238,10 +251,10 @@ public class Search {
 		boolean status;
 		for (Integer nodeID : results) {
 			node = store.getGraphNode(nodeID);
-			//status = store.checkPermission(uid,node.getDocumentID());
-			//if (!status) {
-				//results.remove(nodeID);
-			//}
+//			status = store.checkPermission(uid,node.getDocumentID());
+//			if (!status) {
+//				results.remove(nodeID);
+//			}
 		}
 	}
 
