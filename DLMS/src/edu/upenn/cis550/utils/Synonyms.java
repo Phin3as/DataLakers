@@ -21,7 +21,7 @@ public class Synonyms {
 		
 		HashSet<String> result = new HashSet<String>();
 		Synset[] synsets = database.getSynsets(word); 
-		
+		result.add(word);
 		for(Synset synonym : synsets){
 			for(String foo : synonym.getWordForms()){
 				result.add(foo);
