@@ -20,7 +20,7 @@ public class Extract extends Thread {
 		StorageAPI store = new StorageAPI(new File("E:/graph10"));
 //		e.setDataBase(store);
 		
-		final File folder = new File("E:/sampleFiles");
+		final File folder = new File("E:/sampleFiles/1.json");
 		try {
 			getFiles(folder, e, store);
 		} catch (IOException | SAXException | TikaException | ParserConfigurationException e1) {

@@ -29,7 +29,7 @@ public class ExtractFields {
 	private static int id; // this is for node id, change it to sensible name
 	private int documentID;
 	private File file;
-	private StorageAPI store;
+//	private StorageAPI store;
 	
 	//Extractor Objects
 	private ExtractJson json = new ExtractJson();
@@ -49,9 +49,9 @@ public class ExtractFields {
 		return instance;	
 	}
 	   
-	public void setDataBase(StorageAPI db){
-		this.store = db;
-	}
+//	public void setDataBase(StorageAPI db){
+//		this.store = db;
+//	}
 	
 	public int getDocumentID() {
 		return documentID;
@@ -78,7 +78,7 @@ public class ExtractFields {
 	
 	public void extract(File f, StorageAPI store) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException{
 		this.file = f;
-		this.store = store;
+//		this.store = store;
 //		this.documentID = dID;
 		this.documentID = store.getLastDocID() + 1;
 		this.id = store.getLastNodeID();
@@ -101,7 +101,6 @@ public class ExtractFields {
 			store.putForwardIndex(documentID, nodes);
 			link.linker(store, documentID);
 		} else {
-			
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");
 		}
 		
