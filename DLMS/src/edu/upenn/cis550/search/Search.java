@@ -349,15 +349,17 @@ public class Search {
 	}
 
 	private void checkPermission(StorageAPI store, String uid, List<Integer> results) {
-//		GraphNode node;
-//		boolean status;
-//		for (Integer nodeID : results) {
-//			node = store.getGraphNode(nodeID);
-//			status = store.checkPermission(node.getDocumentID(),uid);
-//			if (!status) {
-//				results.remove(nodeID);
-//			}
-//		}
+		GraphNode node;
+		boolean status;
+		Set<Integer> nodeIDsToRemove = new HashSet<Integer>();
+		for (Integer nodeID : results) {
+			node = store.getGraphNode(nodeID);
+			status = store.checkPermission(node.getDocumentID(),uid);
+			if (!status) {
+				nodeIDsToRemove.add(nodeID);
+			}
+		}
+		results.removeAll(nodeIDsToRemove);
 	}
 
 	private List<Integer> getConnectedNodes(StorageAPI store, Integer nodeID) {
