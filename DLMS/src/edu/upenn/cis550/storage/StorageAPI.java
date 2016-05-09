@@ -13,7 +13,7 @@ import com.sleepycat.persist.EntityCursor;
 
 import edu.upenn.cis550.extractor.Struct;
 import edu.upenn.cis550.linker.LinkerObject;
-
+import edu.upenn.cis550.utils.Stemmer;
 /**
  * Main Storage API to access the database
  * @author Jitesh
@@ -22,7 +22,7 @@ import edu.upenn.cis550.linker.LinkerObject;
 public class StorageAPI {
 	public static BerkleyDBEnvironment myDBEnv = new BerkleyDBEnvironment();
 	public static DataAccessor da;
-	
+	public static String logKey = "log";
 	private File storageDir;
 	
 	public StorageAPI(File storageDir){
@@ -46,6 +46,31 @@ public class StorageAPI {
 		myDBEnv.close();
 	}
 	
+	public int getLastNodeID(){
+		DataLog log = da.dataLogByValue.get(logKey);
+		int lastNodeID = 0;
+		if(log == null){
+			log = new DataLog(logKey,0,0);
+			da.dataLogByValue.put(log);
+		}else{
+			lastNodeID = log.getLastNodeID();
+		}
+		return lastNodeID;
+	}
+	
+	public int getLastDocID(){
+		DataLog log = da.dataLogByValue.get(logKey);
+		int lastDocID = 0;
+		if(log == null){
+			log = new DataLog(logKey,0,0);
+			da.dataLogByValue.put(log);
+		}else{
+			lastDocID = log.getLastDocID();
+		}
+		return lastDocID;
+	}
+	
+	
 	/**
 	 * Put graphNode in the database
 	 * @param node
@@ -54,15 +79,22 @@ public class StorageAPI {
 		GraphNode graphNode = new GraphNode(node.getId(),node.getDocumentID(),node.getName(),node.getType(),
 									node.getValue(),node.getParent(),node.getChildren());
 		if(checkName(node.getType())){
-			putInvertedIndex(node.getName(), node.getId());
+			putInvertedIndex(node.getName().toLowerCase(), node.getId());
+			putStemmedInvertedIndex(node.getName().toLowerCase(), node.getId());
 		}
 		
 		if(checkValue(node.getValue(), node.getType())){
-			putInvertedIndex(node.getValue(), node.getId());
+			putInvertedIndex(node.getValue().toLowerCase(), node.getId());
+			putStemmedInvertedIndex(node.getValue().toLowerCase(), node.getId());
 		}
 		da.nodeByID.put(graphNode);
 	}
 	
+	/**
+	 * Returns the Graph Node for the given nodeID
+	 * @param nodeID
+	 * @return
+	 */
 	public GraphNode getGraphNode(int nodeID){
 		GraphNode node = da.nodeByID.get(nodeID);
 		if(node == null){
@@ -70,6 +102,7 @@ public class StorageAPI {
 		}
 		return node;
 	}
+	
 	/**
 	 * Create and put inverted index in the database
 	 * @param word
@@ -102,6 +135,34 @@ public class StorageAPI {
 		return invertedIndexSet.getGraphNodes();
 	}
 	
+	/**
+	 * Stem and put word with inverted index in the database
+	 * @param word
+	 * @param nodeID
+	 */
+	public void putStemmedInvertedIndex(String word, int nodeID){
+		StringTokenizer tokenizer = new StringTokenizer(word, " \t\n\r\f,.:;'?![]");
+		while(tokenizer.hasMoreTokens()){
+			String token = tokenizer.nextToken();
+			Stemmer wordStemmer = new Stemmer();
+			String stemmedWord = wordStemmer.stemWord(token);
+			StemmedInvertedIndex index = da.stemIndexByValue.get(stemmedWord);
+			if(index == null){
+				index = new StemmedInvertedIndex(stemmedWord, nodeID);
+			}else{
+				index.getGraphNodes().add(nodeID);
+			}
+			da.stemIndexByValue.put(index);
+		}
+	}
+	
+	public HashSet<Integer> getStemmedInvertedIndex(String word){
+		StemmedInvertedIndex stemInvertedIndexSet = da.stemIndexByValue.get(word);
+		if(stemInvertedIndexSet == null){
+			return null;
+		}
+		return stemInvertedIndexSet.getGraphNodes();
+	}
 	/**
 	 * Create and put forward index in the database
 	 * @param docID
@@ -147,6 +208,7 @@ public class StorageAPI {
 		node.getLinkedNodes().add(node2);
 		da.nodeLinkerByID.put(node);
 	}
+	
 	/**
 	 * Returns a list of linked nodes to the input nodeID
 	 * @param nodeID
@@ -155,17 +217,35 @@ public class StorageAPI {
 	public List<Integer> getLinkedNodes(int nodeID){
 		return da.nodeLinkerByID.get(nodeID).getLinkedNodes();
 	}
+	
 	/**
 	 * Putting a new document in the database
 	 * @param documentID
 	 * @param type
 	 * @param user
 	 */
-	public void putDocument(long documentID, String type, String user){
+	public void putDocument(int documentID, String type, String user){
 		Document document = new Document(documentID, type, user);
 		da.documentByID.put(document);
 	}
 	
+	/**
+	 * Check if a user has permission to access a docID
+	 * @param docID
+	 * @param user
+	 * @return
+	 */
+	public boolean checkPermission(int docID, String user){
+		Document document = da.documentByID.get(docID);
+		if(document.getDocType().equals("PUBLIC")){
+			return true;
+		}
+		
+		if(document.getUsers().contains(user)){
+			return true;
+		}
+		return false;
+	}
 	/**
 	 * Validate name parameter
 	 * @param type
@@ -231,6 +311,7 @@ public class StorageAPI {
 		return docsList;
 	}
 	
+	/************************ Testing Functions *****************************/
 	/**
 	 * Helper function for testing inverted index
 	 * @throws DatabaseException

@@ -9,7 +9,7 @@ import com.sleepycat.persist.model.PrimaryKey;
 public class Document {
 
 	@PrimaryKey
-	private long docID;
+	private int docID;
 	private String docType;
 	private HashSet<String> users = new HashSet<String>();
 	
@@ -17,7 +17,7 @@ public class Document {
 		
 	}
 	
-	public Document(long docID, String type, String user){
+	public Document(int docID, String type, String user){
 		this.docID = docID;
 		this.docType = type;
 		if(type.equals("PRIVATE")){
@@ -25,7 +25,7 @@ public class Document {
 		}
 	}
 	
-	public long getDocID(){
+	public int getDocID(){
 		return docID;
 	}
 	

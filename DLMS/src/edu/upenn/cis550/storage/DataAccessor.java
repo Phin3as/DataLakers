@@ -10,8 +10,10 @@ public class DataAccessor {
 	public PrimaryIndex<String, InvertedIndex> wordByValue; 
 	public PrimaryIndex<Integer,ForwardIndex> docByID;
 	public PrimaryIndex<String, User> userByName;
-	public PrimaryIndex<Long, Document> documentByID;
-	public PrimaryIndex<Integer, LinkedNodes> nodeLinkerByID; 
+	public PrimaryIndex<Integer, Document> documentByID;
+	public PrimaryIndex<Integer, LinkedNodes> nodeLinkerByID;
+	public PrimaryIndex<String, StemmedInvertedIndex> stemIndexByValue;
+	public PrimaryIndex<String, DataLog> dataLogByValue;
 	/**
 	 * Open the indices
 	 * @param store
@@ -25,7 +27,9 @@ public class DataAccessor {
 		wordByValue = store.getPrimaryIndex(String.class, InvertedIndex.class);
 		docByID = store.getPrimaryIndex(Integer.class, ForwardIndex.class);
 		userByName = store.getPrimaryIndex(String.class, User.class);
-		documentByID = store.getPrimaryIndex(Long.class, Document.class);
+		documentByID = store.getPrimaryIndex(Integer.class, Document.class);
 		nodeLinkerByID = store.getPrimaryIndex(Integer.class, LinkedNodes.class);
+		stemIndexByValue = store.getPrimaryIndex(String.class, StemmedInvertedIndex.class);
+		dataLogByValue = store.getPrimaryIndex(String.class, DataLog.class);
 	}
 }
