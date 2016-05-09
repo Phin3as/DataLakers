@@ -17,7 +17,7 @@ import edu.upenn.cis550.utils.Synonyms;
 
 public class Search {
 
-	Object searchGraph(String uid, String query) {
+	public List<List<Integer>> searchGraph(String uid, String query) {
 		List<List<Integer>> ret_value=null;
 		
 		String[] queryKeys = query.split(" ");
