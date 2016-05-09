@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.upenn.cis550.storage.GraphNode;
 import edu.upenn.cis550.storage.StorageAPI;
@@ -35,7 +36,46 @@ public class Search {
 		else {
 			System.out.println("Query length out of bounds : " + queryKeys.length);
 		}
+		checkForDuplicates(ret_value);
 		return ret_value;
+	}
+
+	private void checkForDuplicates(List<List<Integer>> ret_value) {
+		if (ret_value==null)
+			return;
+		boolean status;
+		Set<Integer> pathsToRemove = new LinkedHashSet<Integer>();
+		for (int i=0 ; i<ret_value.size(); i++) {
+			for (int j=i ; j<ret_value.size(); j++) {
+				if (i==j || pathsToRemove.contains(j)) {
+					continue;
+				}
+				status = compareLists(ret_value.get(i),ret_value.get(j));
+				if (status==true) {
+					pathsToRemove.add(j);
+				}
+			}
+		}
+		
+		List<Integer> pathsToRemoveList = new ArrayList<Integer>(pathsToRemove);
+		Collections.sort(pathsToRemoveList);
+		Collections.reverse(pathsToRemoveList);
+		
+		for (int index : pathsToRemoveList) {
+			ret_value.remove(index);
+		}
+		
+	}
+
+	private boolean compareLists(List<Integer> list, List<Integer> list2) {
+		if (list.size()!=list2.size())
+			return false;
+		for (int i = 0; i<list.size();i++) {
+			if (list.get(i)!=list2.get(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private List<List<Integer>> searchQuery(String uid, String string1, String string2) {
@@ -94,6 +134,9 @@ public class Search {
 		connectedNodes = getConnectedNodes(store, gNodeID);
 		checkPermission(store, uid, connectedNodes);
 		for (Integer connectedNodeID : connectedNodes) {
+			if (tempPath.contains(connectedNodeID)) {
+				continue;
+			}
 			tempPath.add(connectedNodeID);
 			if ( nodeIDsForString2.contains(connectedNodeID) ) {
 				paths.add(new ArrayList<Integer>(tempPath));
