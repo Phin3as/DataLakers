@@ -30,8 +30,8 @@ public class Extract extends Thread {
 	public void run(){
 		
 		ExtractFields e = ExtractFields.getInstance();
-		StorageAPI store = new StorageAPI(new File(Constants.PATH_DICT));
-		String file = Constants.PATH_FILES + "\\" + docName;
+		StorageAPI store = new StorageAPI(new File(Constants.PATH_STORAGE));
+		String file = Constants.PATH_FILES + "/" + docName;
 		final File folder = new File(file);
 		try {
 			getFiles(folder, e, store);
@@ -46,7 +46,7 @@ public class Extract extends Thread {
 	
 	public static void main(String args[]) {
 		
-		(new Extract("reed.xml", "PUBLIC", "CORPUS")).start();
+		(new Extract("", "PUBLIC", "ADMIN")).start();
 		
 	}
 	

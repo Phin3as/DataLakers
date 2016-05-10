@@ -11,7 +11,7 @@ public class LinkerDriver {
 		long startTime = System.currentTimeMillis();
 		Linker linker = new Linker();
 		
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 		
 //		linker.threadedLinker(1);

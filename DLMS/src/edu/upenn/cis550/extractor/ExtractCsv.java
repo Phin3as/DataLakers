@@ -29,7 +29,7 @@ public class ExtractCsv {
 	private File f;
 	private String extension;
 	private StorageAPI store;
-	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
+//	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
 	private CSVParser parser;
 	private ArrayList<Integer> nodes = new ArrayList<Integer>();
 	
@@ -94,7 +94,7 @@ public class ExtractCsv {
 	 					 					null);
 				store.putGraphNode(recNode);
 				nodes.add(recNode.getId());
-				map.put(recNode.getId(), recNode);
+//				map.put(recNode.getId(), recNode);
 				headChildren.add(recNode.getId());
 				j = j + 1;
 			}
@@ -102,39 +102,39 @@ public class ExtractCsv {
 			headNode.setChildren(headChildren);
 			store.putGraphNode(headNode);
 			nodes.add(headNode.getId());
-			map.put(headNode.getId(), headNode);
+//			map.put(headNode.getId(), headNode);
 			headChildren = new ArrayList<Integer>();
 		}
 		
 		fileNode.setChildren(fileChildren);
 		store.putGraphNode(fileNode);
 		nodes.add(fileNode.getId());
-		map.put(fileNode.getId(), fileNode);
-		for (CSVRecord rec : parser) {
-			System.out.println(rec.toString());
-		}
-		
+//		map.put(fileNode.getId(), fileNode);
+//		for (CSVRecord rec : parser) {
+//			System.out.println(rec.toString());
+//		}
+//		
 		// Visualize
-		for(int i : map.keySet()){
-			System.out.println(i + "------->");
-			System.out.println("\tNode id :"  + map.get(i).getId());
-			System.out.println("\tDoc Id :"  + map.get(i).getDocumentID());
-			System.out.println("\tName :"  + map.get(i).getName());
-			System.out.println("\tType :"  + map.get(i).getType());
-			System.out.println("\tValue :"  + map.get(i).getValue());
-			System.out.println("\tParent :"  + map.get(i).getParent());
-			System.out.print("\tChildren : ");
-			
-			if(!(map.get(i).getChildren() == null)){
-				for (int j : map.get(i).getChildren()){
-					System.out.print(j + " " );
-				}
-				System.out.println("\t");
-			}else{
-				System.out.println("None");
-			}
-			
-		}
+//		for(int i : map.keySet()){
+//			System.out.println(i + "------->");
+//			System.out.println("\tNode id :"  + map.get(i).getId());
+//			System.out.println("\tDoc Id :"  + map.get(i).getDocumentID());
+//			System.out.println("\tName :"  + map.get(i).getName());
+//			System.out.println("\tType :"  + map.get(i).getType());
+//			System.out.println("\tValue :"  + map.get(i).getValue());
+//			System.out.println("\tParent :"  + map.get(i).getParent());
+//			System.out.print("\tChildren : ");
+//			
+//			if(!(map.get(i).getChildren() == null)){
+//				for (int j : map.get(i).getChildren()){
+//					System.out.print(j + " " );
+//				}
+//				System.out.println("\t");
+//			}else{
+//				System.out.println("None");
+//			}
+//			
+//		}
 		
 		// Visualization ends
 		

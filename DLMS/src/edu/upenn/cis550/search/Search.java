@@ -39,11 +39,11 @@ public class Search {
 			});
 		}
 		else {
-			System.out.println("Query length out of bounds : " + queryKeys.length);
+//			System.out.println("Query length out of bounds : " + queryKeys.length);
 		}
 		checkForDuplicates(ret_value);
 		
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 
 		List<String> singleOp;
@@ -123,7 +123,7 @@ public class Search {
 		HashSet<String> stemmedSynonymsForString1 = new HashSet<String>();
 		HashSet<String> stemmedSynonymsForString2 = new HashSet<String>();
 
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 
 		if (Constants.IS_SYNONYM) {
@@ -180,7 +180,7 @@ public class Search {
 				nodesForString1.add(node);
 			}
 		}
-		System.out.println("String : "+string1+"\nNodes : "+nodeIDsForString1.size());
+//		System.out.println("String : "+string1+"\nNodes : "+nodeIDsForString1.size());
 		
 		invertedIndex = new HashSet<Integer>();
 		//generating list of nodes for string2
@@ -206,7 +206,7 @@ public class Search {
 				nodesForString2.add(node);
 			}
 		}
-		System.out.println("String : "+string2+"\nNodes : "+nodeIDsForString2.size());
+//		System.out.println("String : "+string2+"\nNodes : "+nodeIDsForString2.size());
 		
 		//algo to reach any node for string2 from any node in string1
 		List<Integer> tempPath = new ArrayList<Integer>();
@@ -257,7 +257,7 @@ public class Search {
 		HashSet<String> synonyms = new HashSet<String>();
 		HashSet<String> stemmedSynonyms = new HashSet<String>();
 
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 
 		if (Constants.IS_SYNONYM) {
@@ -328,11 +328,11 @@ public class Search {
 	}
 
 	private void printList(StorageAPI store, List<Integer> path) {
-		System.out.println("New Path:");
+//		System.out.println("New Path:");
 		GraphNode node;
 		for (Integer data : path) {
 			node = store.getGraphNode(data);
-			System.out.println(data+":("+node.getName()+","+node.getValue()+","+node.getType()+")");
+//			System.out.println(data+":("+node.getName()+","+node.getValue()+","+node.getType()+")");
 		}
 		
 	}
