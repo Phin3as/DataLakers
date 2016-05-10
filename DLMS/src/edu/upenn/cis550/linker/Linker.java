@@ -31,15 +31,19 @@ public class Linker {
 			node = store.getGraphNode(nodeID);
 
 			name = node.getName();
-			if (name != null)
+			if (name != null) {
+				name = name.toLowerCase();
 				invertedIndex = store.getInvertedIndex(name);
-			if (invertedIndex != null)
+			}
+			if ((invertedIndex != null) && (store.checkName(node.getType())))
 				linkedNodes.addAll(invertedIndex);
 			
 			value = node.getValue();
-			if (value != null)
+			if (value != null) {
+				value = value.toLowerCase();
 				invertedIndex = store.getInvertedIndex(value);
-			if (invertedIndex != null)
+			}
+			if (invertedIndex != null && store.checkValue(value,node.getType()))
 				linkedNodes.addAll(invertedIndex);
 			
 			linkedNodes.removeAll(docNodes);

@@ -15,7 +15,7 @@ public class LinkerDriver {
 		StorageAPI store = new StorageAPI(storageDir);
 		
 //		linker.threadedLinker(1);
-		linker.linker(store,0);
+		linker.linker(store,1);
 		
 		store.closeDB();
 		
