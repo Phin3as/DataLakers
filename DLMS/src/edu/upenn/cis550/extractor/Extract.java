@@ -58,7 +58,7 @@ public class Extract extends Thread {
 			int docID = e.extract(folder, store);
 			store.putDocument(docID, accessType, docName, user);
 			store.putUserDoc(user, docID);
-	    	
+			System.out.println("Finished Extracting File : " + folder.getName());
 	    } else {
 			for (final File fileEntry : folder.listFiles()) {
 		        if (fileEntry.isDirectory()) {
@@ -68,6 +68,7 @@ public class Extract extends Thread {
 		        	int docID = e.extract(fileEntry, store);
 		            store.putDocument(docID, accessType, docName, user);
 		            store.putUserDoc(user, docID);
+		            System.out.println("Finished Extracting file : " + fileEntry.getName());
 		        }
 		    }
 	    }

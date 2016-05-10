@@ -69,6 +69,9 @@ public class UploadServlet extends HttpServlet{
 	                }
 	            }
 	        }
+	        if(userName.equals("admin")){
+	        	accessType = "PUBLIC";
+	        }
 	        Extract extractor = new Extract(fileName,accessType,userName);
 	        extractor.start();
             out.println("<body>File Successfully Uploaded to Workers!</body></html>");

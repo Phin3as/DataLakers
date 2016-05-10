@@ -16,7 +16,7 @@ public class test {
 		System.out.println(s.stemWord("pissing"));
 		
 		
-		sy.getSynonyms("pepsi");
+		sy.getSynonyms("kill");
 		
 	} 
 }
