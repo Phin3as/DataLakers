@@ -12,11 +12,11 @@ public class test {
 		
 		
 		System.out.println(s.stemWord("Synchronous"));
-		System.out.println(s.stemWord("Synchronizing"));
+		System.out.println(s.stemWord("killing"));
 		System.out.println(s.stemWord("pissing"));
 		
 		
-		sy.getSynonyms("respect");
+		sy.getSynonyms("pepsi");
 		
 	} 
 }

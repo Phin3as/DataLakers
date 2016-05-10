@@ -25,7 +25,7 @@ public class PermissionSevlet extends HttpServlet{
 		System.out.println(docID);
 		
 		/** open the database **/
-		StorageAPI store = new StorageAPI(new File(Constants.PATH_DIR));
+		StorageAPI store = new StorageAPI(new File(Constants.PATH_STORAGE));
 		store.putDocument(Integer.parseInt(docID), "PRIVATE", docName, userID);
 		store.putUserDoc(user, Integer.parseInt(docID));
 		store.closeDB();

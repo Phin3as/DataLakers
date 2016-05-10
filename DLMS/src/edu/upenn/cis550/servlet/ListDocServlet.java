@@ -27,7 +27,7 @@ public class ListDocServlet extends HttpServlet{
 		System.out.println(user);
 		
 		/** open the database **/
-		StorageAPI store = new StorageAPI(new File(Constants.PATH_DIR));
+		StorageAPI store = new StorageAPI(new File(Constants.PATH_STORAGE));
 		HashSet<Integer> userDocs = store.getUserDocs(user);
 		Iterator<Integer> itr = userDocs.iterator();
 		List<ListDocuments> docList = new ArrayList<ListDocuments>();

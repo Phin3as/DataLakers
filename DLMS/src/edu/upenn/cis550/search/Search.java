@@ -43,7 +43,7 @@ public class Search {
 		}
 		checkForDuplicates(ret_value);
 		
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 
 		List<String> singleOp;
@@ -123,7 +123,7 @@ public class Search {
 		HashSet<String> stemmedSynonymsForString1 = new HashSet<String>();
 		HashSet<String> stemmedSynonymsForString2 = new HashSet<String>();
 
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 
 		if (Constants.IS_SYNONYM) {
@@ -257,7 +257,7 @@ public class Search {
 		HashSet<String> synonyms = new HashSet<String>();
 		HashSet<String> stemmedSynonyms = new HashSet<String>();
 
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 
 		if (Constants.IS_SYNONYM) {

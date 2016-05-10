@@ -60,7 +60,7 @@ public class Linker {
 		
 		ExecutorService executor = Executors.newFixedThreadPool(THREAPOOL_SIZE);
 		
-		File storageDir = new File(Constants.PATH_DIR);
+		File storageDir = new File(Constants.PATH_STORAGE);
 		StorageAPI store = new StorageAPI(storageDir);
 		List<Integer> docNodes = store.getDocNodes(docID);
 		
