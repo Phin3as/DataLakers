@@ -247,9 +247,37 @@ public class StorageAPI {
 	 * @param type
 	 * @param user
 	 */
-	public void putDocument(int documentID, String type, String user){
-		Document document = new Document(documentID, type, user);
+	public void putDocument(int documentID, String type, String name, String user){
+		Document document = new Document(documentID, type, name, user);
 		da.documentByID.put(document);
+	}
+	
+	/**
+	 * Put Doc of a user
+	 * @param user
+	 * @param docID
+	 */
+	public void putUserDoc(String user, int docID){
+		User userInfo = da.userByName.get(user);
+		if(userInfo == null){
+			userInfo = new User(user,docID);
+		}else{
+			userInfo.getDocs().add(docID);
+		}
+		da.userByName.put(userInfo);
+	}
+	
+	/**
+	 * Get all the documents uploaded by a user
+	 * @param user
+	 * @return
+	 */
+	public HashSet<Integer> getUserDocs(String user){
+		User userInfo = da.userByName.get(user);
+		if(user == null){
+			return null;
+		}
+		return userInfo.getDocs();
 	}
 	
 	/**

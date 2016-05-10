@@ -10,13 +10,13 @@ public class User {
 	@PrimaryKey
 	private String user;
 	
-	private HashSet<Long> docs = new HashSet<Long>();
+	private HashSet<Integer> docs = new HashSet<Integer>();
 	
 	public User(){
 		
 	}
 	
-	public User(String user, Long docID){
+	public User(String user, int docID){
 		this.user = user;
 		this.docs.add(docID);
 	}
@@ -25,7 +25,7 @@ public class User {
 		return user;
 	}
 	
-	public HashSet<Long> getDocs(){
+	public HashSet<Integer> getDocs(){
 		return docs;
 	}
 }

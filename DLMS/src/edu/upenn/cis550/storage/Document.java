@@ -10,6 +10,7 @@ public class Document {
 
 	@PrimaryKey
 	private int docID;
+	private String docName;
 	private String docType;
 	private HashSet<String> users = new HashSet<String>();
 	
@@ -17,9 +18,10 @@ public class Document {
 		
 	}
 	
-	public Document(int docID, String type, String user){
+	public Document(int docID, String type, String docName, String user){
 		this.docID = docID;
 		this.docType = type;
+		this.setDocName(docName);
 		if(type.equals("PRIVATE")){
 			this.users.add(user);
 		}
@@ -35,5 +37,13 @@ public class Document {
 	
 	public HashSet<String> getUsers(){
 		return users;
+	}
+
+	public String getDocName() {
+		return docName;
+	}
+
+	public void setDocName(String docName) {
+		this.docName = docName;
 	}
 }
