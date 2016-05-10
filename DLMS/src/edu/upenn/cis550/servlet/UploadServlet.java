@@ -54,14 +54,19 @@ public class UploadServlet extends HttpServlet{
 	                try {
 						item.write(uploadFile);
 						//Run extractor
-						(new Extract()).start();
+						//(new Extract()).start();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-	                out.println("<body>File Successfully Uploaded to Workers!</body></html>");
-	                out.close();
+	            }else{
+	                String fieldName = item.getFieldName();
+	                String fieldValue = item.getString();
+	                System.out.println(fieldName);
+	                System.out.println(fieldValue);
 	            }
 	        }
+            out.println("<body>File Successfully Uploaded to Workers!</body></html>");
+            out.close();
 	    } catch (FileUploadException e) {
 	        throw new ServletException("Cannot parse multipart request.", e);
 	    }
