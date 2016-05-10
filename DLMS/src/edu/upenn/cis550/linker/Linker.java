@@ -16,7 +16,7 @@ public class Linker {
 	static final int THREAPOOL_SIZE=20;
 	
 	public boolean linker(StorageAPI store,Integer docID) {
-		System.out.println("Linker.linker():BEGIN:");
+//		System.out.println("Linker.linker():BEGIN:");
 
 		List<Integer> docNodes = store.getDocNodes(docID);
 		List<LinkerObject> links = new ArrayList<LinkerObject>();
@@ -51,12 +51,12 @@ public class Linker {
 		}
 		store.updateLinks(links);
 		
-		System.out.println("Linker.linker()::END");
+//		System.out.println("Linker.linker()::END");
 		return true;
 	}
 
 	public boolean threadedLinker(Integer docID) {
-		System.out.println("Linker.threadedLinker()::BEGIN");
+//		System.out.println("Linker.threadedLinker()::BEGIN");
 		
 		ExecutorService executor = Executors.newFixedThreadPool(THREAPOOL_SIZE);
 		
@@ -73,7 +73,7 @@ public class Linker {
         while (!executor.isTerminated()) {}
         
 		store.closeDB();
-		System.out.println("Linker.threadedLinker()::END");
+//		System.out.println("Linker.threadedLinker()::END");
 		return true;
 	}
 	private void printNodes(StorageAPI store, GraphNode node, HashSet<Integer> linkedNodes) {
@@ -86,7 +86,7 @@ public class Linker {
 //			System.out.println("node ("+linkedNode.getNodeID()+") : "+linkedNode.getName()+","+linkedNode.getValue());
 //		}
 
-		System.out.println("New Link ("+node.getNodeID()+") : "+linkedNodes.size());
+//		System.out.println("New Link ("+node.getNodeID()+") : "+linkedNodes.size());
 //		for (Integer nodeID : linkedNodes) {
 //			System.out.println(nodeID);
 //		}

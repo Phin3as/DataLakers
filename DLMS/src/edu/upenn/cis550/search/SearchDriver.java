@@ -5,7 +5,7 @@ import java.util.List;
 public class SearchDriver {
 
 	public static void main(String[] args) {
-		System.out.println("SearchDriver.main()::BEGIN");
+//		System.out.println("SearchDriver.main()::BEGIN");
 		
 		long startTime = System.currentTimeMillis();
 
@@ -15,18 +15,18 @@ public class SearchDriver {
 			List<List<String>> paths = (List<List<String>>)ret;
 			
 			for (List<String> path : paths) {
-				System.out.println("Output Path : ");
+//				System.out.println("Output Path : ");
 				for (String data : path) {
-					System.out.println(data);
+//					System.out.println(data);
 				}
-				System.out.println();
+//				System.out.println();
 			}
-			System.out.println("frequency : "+paths.size());
+//			System.out.println("frequency : "+paths.size());
 		}
-		System.out.println("SearchDriver.main()::END");
+//		System.out.println("SearchDriver.main()::END");
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
-		System.out.println(totalTime);
+//		System.out.println(totalTime);
 
 	}
 

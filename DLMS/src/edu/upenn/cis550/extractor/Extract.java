@@ -31,7 +31,7 @@ public class Extract extends Thread {
 		
 		ExtractFields e = ExtractFields.getInstance();
 		StorageAPI store = new StorageAPI(new File(Constants.PATH_STORAGE));
-		String file = Constants.PATH_FILES + "\\" + docName;
+		String file = Constants.PATH_FILES + "/" + docName;
 		final File folder = new File(file);
 		try {
 			getFiles(folder, e, store);

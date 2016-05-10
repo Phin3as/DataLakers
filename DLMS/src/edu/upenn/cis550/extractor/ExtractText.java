@@ -31,7 +31,7 @@ public class ExtractText {
 	private File f;
 	private String extension;
 	private StorageAPI store;
-	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
+//	private HashMap<Integer, Struct> map = new HashMap<Integer, Struct>();
 	private ArrayList<Integer> nodes = new ArrayList<Integer>();
 	
 	public ArrayList<Integer> extractNode(int dID, File f, String ext, StorageAPI db) throws IOException, SAXException, TikaException{
@@ -57,31 +57,31 @@ public class ExtractText {
 		root.setChildren(tokenize(root.getId()));
 		store.putGraphNode(root);
 		nodes.add(root.getId());
-		map.put(root.getId(), root);
+//		map.put(root.getId(), root);
 		
-		for(int i : map.keySet()){
-			
-			if(!map.get(i).getName().equals("Systems"))
-				continue;
-			System.out.println(i + "------->");
-			System.out.println("\tNode id :"  + map.get(i).getId());
-			System.out.println("\tDoc Id :"  + map.get(i).getDocumentID());
-			System.out.println("\tName :"  + map.get(i).getName());
-			System.out.println("\tType :"  + map.get(i).getType());
-			System.out.println("\tValue :"  + map.get(i).getValue());
-			System.out.println("\tParent :"  + map.get(i).getParent());
-			System.out.print("\tChildren : ");
-			
-			if(!(map.get(i).getChildren() == null)){
-				for (int j : map.get(i).getChildren()){
-					System.out.print(j + " " );
-				}
-				System.out.println("\t");
-			}else{
-				System.out.println("None");
-			}
-			
-		}
+//		for(int i : map.keySet()){
+//			
+//			if(!map.get(i).getName().equals("Systems"))
+//				continue;
+//			System.out.println(i + "------->");
+//			System.out.println("\tNode id :"  + map.get(i).getId());
+//			System.out.println("\tDoc Id :"  + map.get(i).getDocumentID());
+//			System.out.println("\tName :"  + map.get(i).getName());
+//			System.out.println("\tType :"  + map.get(i).getType());
+//			System.out.println("\tValue :"  + map.get(i).getValue());
+//			System.out.println("\tParent :"  + map.get(i).getParent());
+//			System.out.print("\tChildren : ");
+//			
+//			if(!(map.get(i).getChildren() == null)){
+//				for (int j : map.get(i).getChildren()){
+//					System.out.print(j + " " );
+//				}
+//				System.out.println("\t");
+//			}else{
+//				System.out.println("None");
+//			}
+//			
+//		}
 		
 	}
 	
@@ -120,7 +120,7 @@ public class ExtractText {
 	      i = i + 1;
 	      store.putGraphNode(node);
 	      nodes.add(node.getId());
-	      map.put(node.getId(), node);
+//	      map.put(node.getId(), node);
 	      children.add(node.getId());
 //	      System.out.println(label);
 	    }
