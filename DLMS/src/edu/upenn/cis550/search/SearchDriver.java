@@ -10,23 +10,23 @@ public class SearchDriver {
 		long startTime = System.currentTimeMillis();
 
 		Search search = new Search();
-		Object ret = search.searchGraph("SAJAL","olbiterat mani");
+		Object ret = search.searchGraph("mani","jitesh sanidhya");
 		if (ret instanceof List<?>) {
 			List<List<String>> paths = (List<List<String>>)ret;
 			
 			for (List<String> path : paths) {
-//				System.out.println("Output Path : ");
+				System.out.println("Output Path : ");
 				for (String data : path) {
-//					System.out.println(data);
+					System.out.println(data);
 				}
-//				System.out.println();
+				System.out.println();
 			}
-//			System.out.println("frequency : "+paths.size());
+			System.out.println("frequency : "+paths.size());
 		}
-//		System.out.println("SearchDriver.main()::END");
+		System.out.println("SearchDriver.main()::END");
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
-//		System.out.println(totalTime);
+		System.out.println(totalTime);
 
 	}
 

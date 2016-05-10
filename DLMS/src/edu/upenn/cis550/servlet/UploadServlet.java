@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 
 import edu.upenn.cis550.extractor.Extract;
+import edu.upenn.cis550.utils.Constants;
 
 /**
  * Helper servlet to upload files to aws S3
@@ -35,6 +36,9 @@ public class UploadServlet extends HttpServlet{
 			throws ServletException, IOException {
 	    System.out.println("Upload Request Received!!");
 		response.setContentType("text/html");
+		String fileName = "";
+		String accessType = "PRIVATE";
+		String userName = "";
 		PrintWriter out = response.getWriter();
 		out.println("<html><head><title>File Uploader</title></head>");
 		try {
@@ -44,10 +48,10 @@ public class UploadServlet extends HttpServlet{
 	                // Process form file field (input type="file").
 	                //String fieldName = item.getFieldName();
 	                //System.out.println(fieldName);
-	                String fileName = FilenameUtils.getName(item.getName());
+	                fileName = FilenameUtils.getName(item.getName());
 	                System.out.println(fileName);
 
-	                File uploadFile = new File("C:/Users/Jitesh/Desktop/DataLakers/files",fileName);
+	                File uploadFile = new File(Constants.PATH_FILES,fileName);
 	                if(uploadFile.exists()){
 	                	uploadFile.delete();
 	                }
@@ -60,11 +64,13 @@ public class UploadServlet extends HttpServlet{
 					}
 	            }else{
 	                String fieldName = item.getFieldName();
-	                String fieldValue = item.getString();
-	                System.out.println(fieldName);
-	                System.out.println(fieldValue);
+	                if(fieldName.equals("user")){
+		                userName = item.getString();
+	                }
 	            }
 	        }
+	        Extract extractor = new Extract(fileName,accessType,userName);
+	        extractor.start();
             out.println("<body>File Successfully Uploaded to Workers!</body></html>");
             out.close();
 	    } catch (FileUploadException e) {

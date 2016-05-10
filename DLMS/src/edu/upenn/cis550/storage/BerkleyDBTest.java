@@ -20,7 +20,7 @@ public class BerkleyDBTest {
 
 	public static void main(String args[]){
 		//myDBEnvPath = new File(args[0]);
-		myDBEnvPath = new File(Constants.PATH_DIR);
+		myDBEnvPath = new File(Constants.PATH_STORAGE);
 		StorageAPI storage = new StorageAPI(myDBEnvPath);
 		BerkleyDBTest dbTest = new BerkleyDBTest();
 		try {

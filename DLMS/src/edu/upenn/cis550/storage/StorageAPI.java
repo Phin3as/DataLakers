@@ -103,7 +103,6 @@ public class StorageAPI {
 			putInvertedIndex(node.getName().toLowerCase(), node.getId());
 			putStemmedInvertedIndex(node.getName().toLowerCase(), node.getId());
 		}
-		
 		if(checkValue(node.getValue(), node.getType())){
 			putInvertedIndex(node.getValue().toLowerCase(), node.getId());
 			putStemmedInvertedIndex(node.getValue().toLowerCase(), node.getId());

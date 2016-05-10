@@ -142,7 +142,7 @@ public class Search {
 				synonymsForString2.add(correctedString2);
 			}
 		}
-
+		
 		if (Constants.IS_STEM) {
 			Stemmer st = new Stemmer();
 			String stemmedWord;
@@ -223,6 +223,8 @@ public class Search {
 	private void findGraphPathRecursive(int currentDepth, Integer gNodeID, List<Integer> nodeIDsForString2, int depth, List<Integer> tempPath, List<List<Integer>> paths, String uid, StorageAPI store) {
 		if (currentDepth>=depth)
 			return;
+		//if (paths.size()>30)
+		//	return;
 		List<Integer> connectedNodes = new ArrayList<Integer>();
 		connectedNodes = getConnectedNodes(store, gNodeID);
 		checkPermission(store, uid, connectedNodes);
