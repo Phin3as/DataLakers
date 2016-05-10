@@ -8,6 +8,8 @@ import java.util.Iterator;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 
+import edu.upenn.cis550.utils.Constants;
+
 /**
  * A test class for testing the berkley DB content
  * @author Jitesh
@@ -17,12 +19,15 @@ public class BerkleyDBTest {
 	private static File myDBEnvPath;
 
 	public static void main(String args[]){
-		myDBEnvPath = new File(args[0]);
+		//myDBEnvPath = new File(args[0]);
+		myDBEnvPath = new File(Constants.PATH_DIR);
 		StorageAPI storage = new StorageAPI(myDBEnvPath);
 		BerkleyDBTest dbTest = new BerkleyDBTest();
 		try {
-			dbTest.showAllNodes();
-			dbTest.showAllWords();
+			dbTest.showAllUsers();
+			dbTest.showAllDocs();
+			//dbTest.showAllNodes();
+			//dbTest.showAllWords();
 		} 
 		catch (DatabaseException dbe) {
 			System.err.println("DatabaseTest: " + dbe.toString());
@@ -83,6 +88,40 @@ public class BerkleyDBTest {
 			System.out.println("\nWord:- " + word);
 			HashSet<Integer> nodeIDs = item.getGraphNodes();
 			Iterator<Integer> iter = nodeIDs.iterator();
+			while(iter.hasNext()){
+				System.out.print(iter.next());
+				System.out.print("\t");
+			}
+			System.out.println("");
+		}
+		items.close();
+	}
+	
+	public void showAllUsers() throws DatabaseException{
+		EntityCursor<User> items = StorageAPI.da.userByName.entities();
+		for(User item: items){
+			System.out.println("<------->");
+			String user = item.getUser();
+			System.out.println("\nUser:- " + user);
+			HashSet<Integer> docIDs = item.getDocs();
+			Iterator<Integer> iter = docIDs.iterator();
+			while(iter.hasNext()){
+				System.out.print(iter.next());
+				System.out.print("\t");
+			}
+			System.out.println("");
+		}
+		items.close();
+	}
+	
+	public void showAllDocs() throws DatabaseException{
+		EntityCursor<Document> items = StorageAPI.da.documentByID.entities();
+		for(Document item: items){
+			System.out.println("<------->");
+			int docID = item.getDocID();
+			System.out.println("\nDocID:- " + docID);
+			HashSet<String> docIDs = item.getUsers();
+			Iterator<String> iter = docIDs.iterator();
 			while(iter.hasNext()){
 				System.out.print(iter.next());
 				System.out.print("\t");

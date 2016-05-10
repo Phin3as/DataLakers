@@ -252,6 +252,12 @@ public class StorageAPI {
 		da.documentByID.put(document);
 	}
 	
+	public void assignPermission(int documentID, String user){
+		Document document = da.documentByID.get(documentID);
+		document.getUsers().add(user);
+		da.documentByID.put(document);
+	}
+	
 	/**
 	 * Put Doc of a user
 	 * @param user
