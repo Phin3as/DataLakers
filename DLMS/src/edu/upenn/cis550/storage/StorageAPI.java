@@ -280,6 +280,14 @@ public class StorageAPI {
 		return userInfo.getDocs();
 	}
 	
+	public String getDocName(int docID){
+		Document doc = da.documentByID.get(docID);
+		if(doc == null){
+			return null;
+		}
+		return doc.getDocName();
+	}
+	
 	/**
 	 * Check if a user has permission to access a docID
 	 * @param docID
