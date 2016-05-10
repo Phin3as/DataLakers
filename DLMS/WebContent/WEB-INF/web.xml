@@ -8,9 +8,52 @@
          <servlet-class>edu.upenn.cis550.servlet.MasterServlet</servlet-class>
      </servlet>
 	 
+     <servlet>
+         <servlet-name>SearchServlet</servlet-name>
+         <servlet-class>edu.upenn.cis550.servlet.SearchServlet</servlet-class>
+         <load-on-startup>1</load-on-startup>
+     </servlet>
+     
+     <servlet>
+         <servlet-name>UploadServlet</servlet-name>
+         <servlet-class>edu.upenn.cis550.servlet.UploadServlet</servlet-class>
+         <load-on-startup>1</load-on-startup>
+     </servlet>     
+
+     <servlet>
+         <servlet-name>PermissionServlet</servlet-name>
+         <servlet-class>edu.upenn.cis550.servlet.PermissionServlet</servlet-class>
+         <load-on-startup>1</load-on-startup>
+     </servlet> 
+
+     <servlet>
+         <servlet-name>ListDocServlet</servlet-name>
+         <servlet-class>edu.upenn.cis550.servlet.ListDocServlet</servlet-class>
+         <load-on-startup>1</load-on-startup>
+     </servlet> 
+     	 
 	 <servlet-mapping>
          <servlet-name>MasterServlet</servlet-name>
          <url-pattern>/*</url-pattern>
      </servlet-mapping>
+
+	 <servlet-mapping>
+         <servlet-name>SearchServlet</servlet-name>
+         <url-pattern>/search</url-pattern>
+     </servlet-mapping>
      
+	 <servlet-mapping>
+         <servlet-name>UploadServlet</servlet-name>
+         <url-pattern>/upload</url-pattern>
+     </servlet-mapping>
+     
+	 <servlet-mapping>
+         <servlet-name>PermissionServlet</servlet-name>
+         <url-pattern>/assign</url-pattern>
+     </servlet-mapping>
+
+	 <servlet-mapping>
+         <servlet-name>ListDocServlet</servlet-name>
+         <url-pattern>/listDoc</url-pattern>
+     </servlet-mapping>
 </web-app>
