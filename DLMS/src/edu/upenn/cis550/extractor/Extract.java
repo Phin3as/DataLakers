@@ -46,7 +46,7 @@ public class Extract extends Thread {
 	
 	public static void main(String args[]) {
 		
-		(new Extract("", "PUBLIC", "CORPUS")).start();
+		(new Extract("reed.xml", "PUBLIC", "CORPUS")).start();
 		
 	}
 	
@@ -55,7 +55,9 @@ public class Extract extends Thread {
 		if (folder.listFiles() == null){
 	    	
 			System.out.println("Reading file : " + folder.getName());
-			store.putDocument(e.extract(folder, store), accessType, docName, user);
+			int docID = e.extract(folder, store);
+			store.putDocument(docID, accessType, docName, user);
+			store.putUserDoc(user, docID);
 	    	
 	    } else {
 			for (final File fileEntry : folder.listFiles()) {
@@ -63,7 +65,9 @@ public class Extract extends Thread {
 		            getFiles(fileEntry, e, store);
 		        } else {
 		        	System.out.println("Reading file : " + fileEntry.getName());
-		            store.putDocument(e.extract(fileEntry, store), accessType, docName, user);
+		        	int docID = e.extract(fileEntry, store);
+		            store.putDocument(docID, accessType, docName, user);
+		            store.putUserDoc(user, docID);
 		        }
 		    }
 	    }
