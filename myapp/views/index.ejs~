@@ -19,11 +19,10 @@
 
         <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
         <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
-         <form action="/search" method="GET">
+         <form>
           SEARCH KEYWORDS:<br>
-          <input type="text" name="query"><br>
-          <input type="hidden" name="user" value="admin">  
-        </form> 
+          <input type="text" name=""><br>  
+          </form> 
         
         
     </div>

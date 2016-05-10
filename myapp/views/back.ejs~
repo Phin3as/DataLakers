@@ -28,7 +28,7 @@
             <div class="well">
                 
 
-                    <p><strong>Permission Assigned Sccessfully!!</strong></p>
+                    <p><strong>File uploaded successfully</strong></p>
                         <p><strong>click the link below to go back </strong></p>
                         <a href="/profile" class="btn btn-default"><span class="fa fa-user"></span> back </a>
                         

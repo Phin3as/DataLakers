@@ -6,8 +6,8 @@ var multiparty = require('connect-multiparty'),
 var fs = require('fs'),
     S3FS = require('s3fs'),
     s3fsImpl = new S3FS('lakersbucket', {
-        accessKeyId: "",
-        secretAccessKey: ""
+        accessKeyId: "AKIAIBYUBM3SCYRLTQ7A",
+        secretAccessKey: "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"
     });
 
 //Create our bucket if it doesn't exist
