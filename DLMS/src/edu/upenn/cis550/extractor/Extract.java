@@ -11,26 +11,34 @@ import org.xml.sax.SAXException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import edu.upenn.cis550.storage.StorageAPI;
+import edu.upenn.cis550.utils.Constants;
 
 public class Extract extends Thread {
+	
+	private String docName;
+	private String accessType;
+	private String user;
+//	private boolean isFolder;
+	
+	public Extract(String docName, String accessType, String user){
+		this.docName = docName;
+		this.accessType = accessType;
+		this.user = user;
+//		this.isFolder = isFolder;
+	}
 	
 	public void run(){
 		
 		ExtractFields e = ExtractFields.getInstance();
-		StorageAPI store = new StorageAPI(new File("E:/graph10"));
-//		e.setDataBase(store);
-		
-		final File folder = new File("E:/sampleFiles/1.json");
+		StorageAPI store = new StorageAPI(new File(Constants.PATH_DICT));
+		String file = Constants.PATH_FILES + "\\" + docName;
+		final File folder = new File(file);
 		try {
 			getFiles(folder, e, store);
 		} catch (IOException | SAXException | TikaException | ParserConfigurationException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			System.out.println("Not compatible");
 		}
-		
-//		store.showAllDocs();
-//		store.showAllNodes();
-//		store.showAllWords();
 		
 		store.closeDB();
 	}
@@ -38,20 +46,24 @@ public class Extract extends Thread {
 	
 	public static void main(String args[]) {
 		
-		(new Extract()).start();
+		(new Extract("", "PUBLIC", "CORPUS")).start();
 		
 	}
 	
-	public static void getFiles(final File folder, ExtractFields e, StorageAPI store) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException {
-	    if (folder.listFiles() == null){
-	    	e.extract(folder, store);
+	public void getFiles(final File folder, ExtractFields e, StorageAPI store) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException {
+	    
+		if (folder.listFiles() == null){
+	    	
+			System.out.println("Reading file : " + folder.getName());
+			store.putDocument(e.extract(folder, store), accessType, docName, user);
+	    	
 	    } else {
 			for (final File fileEntry : folder.listFiles()) {
 		        if (fileEntry.isDirectory()) {
 		            getFiles(fileEntry, e, store);
 		        } else {
 		        	System.out.println("Reading file : " + fileEntry.getName());
-		            e.extract(fileEntry, store);
+		            store.putDocument(e.extract(fileEntry, store), accessType, docName, user);
 		        }
 		    }
 	    }

@@ -76,7 +76,7 @@ public class ExtractFields {
 		return "NA";
 	}
 	
-	public void extract(File f, StorageAPI store) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException{
+	public int extract(File f, StorageAPI store) throws JsonProcessingException, IOException, SAXException, TikaException, ParserConfigurationException{
 		this.file = f;
 //		this.store = store;
 //		this.documentID = dID;
@@ -106,6 +106,7 @@ public class ExtractFields {
 		
 		store.putLastDocID(documentID);
 		store.putLastNodeID(id);
+		return documentID;
 	}
 	
 	public static int generateId(){
