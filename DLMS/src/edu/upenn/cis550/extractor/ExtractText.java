@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -118,10 +117,13 @@ public class ExtractText {
 	 			 	 			   parentId,
 	 			 	 			   null);
 	      i = i + 1;
-	      store.putGraphNode(node);
-	      nodes.add(node.getId());
+	      if(node.getName().length() > 2){
+		      store.putGraphNode(node);
+		      nodes.add(node.getId());
+		      children.add(node.getId());
+	      }
 //	      map.put(node.getId(), node);
-	      children.add(node.getId());
+	      
 //	      System.out.println(label);
 	    }
 	    return children;

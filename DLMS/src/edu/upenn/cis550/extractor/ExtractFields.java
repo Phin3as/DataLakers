@@ -88,18 +88,22 @@ public class ExtractFields {
 			ArrayList<Integer> nodes = json.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
 			link.linker(store, documentID);
+			instance=null;
 		} else if(ext.equals("plain") || ext.equals("pdf")){
 			ArrayList<Integer> nodes = text.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
 			link.linker(store, documentID);
+			instance=null;
 		} else if(ext.equals("xml") || ext.equals("html")){
 			ArrayList<Integer> nodes = xml.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
 			link.linker(store, documentID);
+			instance=null;
 		} else if(ext.equals("csv")){
 			ArrayList<Integer> nodes = csv.extractNode(documentID, file, extension(), store);
 			store.putForwardIndex(documentID, nodes);
 			link.linker(store, documentID);
+			instance=null;
 		} else {
 			System.out.println(extension() + " Not Supported at the moment! Try back Later!");
 		}

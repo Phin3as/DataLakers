@@ -35,7 +35,7 @@ public class Extract extends Thread {
 		final File folder = new File(file);
 		try {
 			getFiles(folder, e, store);
-		} catch (IOException | SAXException | TikaException | ParserConfigurationException e1) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			System.out.println("Not compatible");
 		}
